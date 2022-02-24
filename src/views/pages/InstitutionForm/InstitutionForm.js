@@ -9,6 +9,17 @@ const InstitutionForm = () => {
   const [notes, setNotes] = useState([]);
   const [experiments, setExperiments] = useState([]);
 
+  const [underQuarantine, setUnderQuarantine] = useState('');
+  const [nameLatin, setNameLatin] = useState('');
+  const [nameUzb, setNameUzb] = useState('');
+  const [dangerType, setDangerType] = useState('');
+  const [description, setDescription] = useState('');
+  const [spreadCountry, setSpreadCountry] = useState('');
+
+  const [eggTemp, setEggTemp] = useState('');
+  const [emonth, setEmonth] = useState('');
+  const [eday, setEday] = useState('');
+
   const onDropPhoto = acceptedImages => {
     if (acceptedImages.length > 0) {
       setImages(acceptedImages);
