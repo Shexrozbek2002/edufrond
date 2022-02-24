@@ -106,66 +106,66 @@ const InstitutionForm = () => {
             <Form.Label className="text-center d-block">Фенологияси</Form.Label>
             <Form.Label className="text-center d-block">Тухум</Form.Label>
             <label>C°</label>
-            <Form.Control type="number" />
+            <Form.Control type="text" />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="mb-2">
             <label>Даври</label>
-            <Form.Control type="date" />
+            <Select placeholder="Ойни танланг" options={options} isMulti />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="date" />
+            <Form.Control type="text" placeholder="Кун" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Личинка</Form.Label>
             <label>C°</label>
-            <Form.Control type="number" />
+            <Form.Control type="text" />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="mb-2">
             <label>Даври</label>
-            <Form.Control type="date" />
+            <Select placeholder="Ойни танланг" options={options} isMulti />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="date" />
+            <Form.Control type="text" placeholder="Кун" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Ғумбак</Form.Label>
             <label>C°</label>
-            <Form.Control type="number" />
+            <Form.Control type="text" />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="mb-2">
             <label>Даври</label>
-            <Form.Control type="date" />
+            <Select placeholder="Ойни танланг" options={options} isMulti />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="date" />
+            <Form.Control type="text" placeholder="Кун" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Етук зот</Form.Label>
             <label>C°</label>
-            <Form.Control type="number" />
+            <Form.Control type="text" />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="mb-2">
             <label>Даври</label>
-            <Form.Control type="date" />
+            <Select placeholder="Ойни танланг" options={options} isMulti />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="date" />
+            <Form.Control type="text" placeholder="Кун" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Купайиши</Form.Label>
             <label>C°</label>
-            <Form.Control type="number" />
+            <Form.Control type="text" />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="mb-2">
             <label>Даври</label>
-            <Form.Control type="date" />
+            <Select placeholder="Ойни танланг" options={options} isMulti />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="date" />
+            <Form.Control type="text" placeholder="Кун" />
           </Form.Group>
 
           <Form.Group>
