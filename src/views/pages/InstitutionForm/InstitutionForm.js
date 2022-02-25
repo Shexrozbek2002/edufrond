@@ -20,6 +20,32 @@ const InstitutionForm = () => {
   const [emonth, setEmonth] = useState('');
   const [eday, setEday] = useState('');
 
+  const [ltemp, setLtemp] = useState(''); //larva (lichinka)
+  const [lmonth, setLmonth] = useState('');
+  const [lday, setLday] = useState('');
+
+  const [ptemp, setPtemp] = useState(''); //pupa (g'umbak)
+  const [pmonth, setPmonth] = useState('');
+  const [pday, setPday] = useState('');
+
+  const [itemp, setItemp] = useState(''); //imago (yetuk)
+  const [imonth, setImonth] = useState('');
+  const [iday, setIday] = useState('');
+
+  const [rtemp, setRtemp] = useState(''); //reproduction (ko'payish)
+  const [rmonth, setRmonth] = useState('');
+  const [rday, setRday] = useState('');
+
+  const [prediction, setPrediction] = useState('');
+
+  const [productName, setProductName] = useState('');
+  const [productCode, setProductCode] = useState('');
+  const [productType, setPorductType] = useState([]);
+
+  const [agro, setAgro] = useState('');
+  const [bio, setBio] = useState('');
+  const [chemic, setChemic] = useState('');
+
   const onDropPhoto = acceptedImages => {
     if (acceptedImages.length > 0) {
       setImages(acceptedImages);
@@ -95,11 +121,7 @@ const InstitutionForm = () => {
 
           <Form.Group>
             <Form.Label>Кенг тарқалган давлатлар</Form.Label>
-            <Form.Select className="form-control">
-              <option value="" disabled>
-                Танлаш...
-              </option>
-            </Form.Select>
+            <Select options={options} isMulti />
           </Form.Group>
           <hr></hr>
           <Form.Group>
