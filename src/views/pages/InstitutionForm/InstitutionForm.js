@@ -3,6 +3,43 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import 'react-dropzone/examples/theme.css';
+import request from '../../../helpers/createRequest';
+
+const fetchPost = () => {
+  request.post('final/', {
+    quarantine_type: '',
+    name_latin: '',
+    name_uzb: '',
+    type: '',
+    description: '',
+    country: [],
+    eggs: '',
+    month_eggs: [],
+    day_eggs: '',
+    larva: '',
+    month_larva: [],
+    day_larva: '',
+    fungus: '',
+    month_fungus: [],
+    day_fungus: '',
+    mature: '',
+    month_mature: [],
+    day_mature: '',
+    manipulation: '',
+    month_m: [],
+    day_m: '',
+    prediction: '',
+    product: '',
+    product_hs_code: '',
+    type_product: '',
+    agro_protect: '',
+    bio_protect: '',
+    chemistry_protect: '',
+    photo: [],
+    notes: [],
+    epxperiences: []
+  })
+}
 
 const InstitutionForm = () => {
   const [images, setImages] = useState([]);
@@ -75,6 +112,14 @@ const InstitutionForm = () => {
   //       {image.name} - {image.size} bytes
   //     </li>
   //   ));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+
+    }
+  }
 
   return (
     <Row>
