@@ -19,8 +19,8 @@ export function getCookie(name) {
 export const request = axios.create({
   baseURL: BASE_URL,
   headers: {
-    Authorization: 'Bearer ' + localStorage.getItem('token'),
-    'X-CSRFToken': getCookie('csrftoken'),
+    // Authorization: 'Bearer ' + localStorage.getItem('token')
+    // 'X-CSRFToken': getCookie('csrftoken'),
     'Content-Type': 'application/json',
   },
 });

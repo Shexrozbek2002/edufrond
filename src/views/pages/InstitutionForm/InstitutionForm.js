@@ -208,12 +208,7 @@ const InstitutionForm = () => {
 
           <Form.Group>
             <Form.Label>Тури</Form.Label>
-            <Form.Select className="form-control">
-              <option value="" disabled>
-                Танлаш...
-              </option>
-            </Form.Select>
-            <Select options={options} isMulti />
+            <Select placeholder="Маҳсулот турини танланг" options={options} isMulti />
           </Form.Group>
           <hr></hr>
           <Form.Group>
