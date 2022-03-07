@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import 'react-dropzone/examples/theme.css';
 import request from '../../../helpers/createRequest';
+import { method } from 'lodash';
 
 const fetchPost = () => {
   request.post('final/', {
@@ -117,7 +118,37 @@ const InstitutionForm = () => {
     e.preventDefault();
 
     const data = {
-
+      quarantine_type: underQuarantine,
+      name_latin: nameLatin,
+      name_uzb: nameUzb,
+      type: dangerType,
+      description: description,
+      country: spreadCountry,
+      eggs: eggTemp,
+      month_eggs: emonth,
+      day_eggs: eday,
+      larva: ltemp,
+      month_larva: lmonth,
+      day_larva: lday,
+      fungus: ptemp,
+      month_fungus: pmonth,
+      day_fungus: pday,
+      mature: itemp,
+      month_mature: imonth,
+      day_mature: iday,
+      manipulation: rtemp,
+      month_m: rmonth,
+      day_m: rday,
+      prediction: prediction,
+      product: productName,
+      product_hs_code: productCode,
+      type_product: productType,
+      agro_protect: agro,
+      bio_protect: bio,
+      chemistry_protect: chemic,
+      photo: images,
+      notes: notes,
+      epxperiences: experiments
     }
   }
 
@@ -128,7 +159,7 @@ const InstitutionForm = () => {
           <Form.Group>
             <Form.Label className="text-center d-block">Зарарли организм</Form.Label>
             <Form.Label>Карантин ёки нокарантин</Form.Label>
-            <Form.Select className="form-control" required>
+            <Form.Select className="form-control" required value={underQuarantine} onChange={e => {setUnderQuarantine(e.target.value)}}>
               <option value="" disabled>
                 Танлаш...
               </option>
@@ -138,16 +169,16 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group>
             <label>Номи (лотин)</label>
-            <Form.Control type="text" required />
+            <Form.Control type="text" required value={nameLatin} onChange={e => {setNameLatin(e.target.value)}} />
           </Form.Group>
           <Form.Group>
             <label>Номи (ўзб)</label>
-            <Form.Control type="text" required />
+            <Form.Control type="text" required value={nameUzb} onChange={e => {setNameUzb(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Тури</Form.Label>
-            <Form.Select className="form-control" required>
+            <Form.Select className="form-control" required value={dangerType} onChange={e => {setDangerType(e.target.value)}}>
               <option value="" disabled>
                 Танлаш...
               </option>
@@ -161,113 +192,113 @@ const InstitutionForm = () => {
 
           <Form.Group>
             <label>Таснифи</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={description} onChange={e => {setDescription(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Кенг тарқалган давлатлар</Form.Label>
-            <Select options={options} isMulti />
+            <Select options={options} isMulti value={spreadCountry} onChange={e => {setSpreadCountry(e.target.value)}} />
           </Form.Group>
           <hr></hr>
           <Form.Group>
             <Form.Label className="text-center d-block">Фенологияси</Form.Label>
             <Form.Label className="text-center d-block">Тухум</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={eggTemp} onChange={e => {setEggTemp(e.target.value)}}/>
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={emonth} onChange={e => {setEmonth(e.target.value)}} />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" />
+            <Form.Control type="text" placeholder="Кун" value={eday} onChange={e => {setEday(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Личинка</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={ltemp} onChange={e => {setLtemp(e.target.value)}}/>
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={lmonth} onChange={e => {setLmonth(e.target.value)}} />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" />
+            <Form.Control type="text" placeholder="Кун" value={lday} onChange={e => {setLday(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Ғумбак</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={ptemp} onChange={e => {setPtemp(e.target.value)}} />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={pmonth} onChange={e => {setPmonth(e.target.value)}}/>
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" />
+            <Form.Control type="text" placeholder="Кун" value={pday} onChange={e => {setPday(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Етук зот</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={itemp} onChange={e => {setItemp(e.target.value)}} />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={imonth} onChange={e => {setImonth(e.target.value)}}/>
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" />
+            <Form.Control type="text" placeholder="Кун" value={iday} onChange={e => {setIday(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Купайиши</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={rtemp} onChange={e => {setRtemp(e.target.value)}} />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={rmonth} onChange={e => {setRmonth(e.target.value)}} />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" />
+            <Form.Control type="text" placeholder="Кун" value={rday} onChange={e => {setRday(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <label>Башорат</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={prediction} onChange={e => {setPrediction(e.target.value)}} />
           </Form.Group>
 
           <hr></hr>
           <Form.Group>
             <Form.Label className="text-center d-block">Маҳсулот</Form.Label>
             <label>Номи</label>
-            <Form.Control type="text" required />
+            <Form.Control type="text" required value={productName} onChange={e => {setProductName(e.target.value)}}/>
           </Form.Group>
           <Form.Group>
             <label>ТН ВЭД код</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={productCode} onChange={e => {setProductCode(e.target.value)}} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Тури</Form.Label>
-            <Select placeholder="Маҳсулот турини танланг" options={options} isMulti />
+            <Select placeholder="Маҳсулот турини танланг" options={options} isMulti value={productType} onChange={e => {setPorductType(e.target.value)}}/>
           </Form.Group>
           <hr></hr>
           <Form.Group>
             <Form.Label className="text-center d-block">Қарши кураш</Form.Label>
             <label>Aгротехник</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={agro} onChange={e => {setAgro(e.target.value)}}/>
           </Form.Group>
           <Form.Group>
             <label>Биологик</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={bio} onChange={e => {setBio(e.target.value)}} />
           </Form.Group>
           <Form.Group>
             <label>Кимёвий</label>
-            <Form.Control type="text" />
+            <Form.Control type="text" value={chemic} onChange={e => {setChemic(e.target.value)}} />
           </Form.Group>
           <hr></hr>
           <Form.Group>
