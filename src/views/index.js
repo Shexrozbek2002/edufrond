@@ -34,23 +34,23 @@ const pageList = [
     path: '/home',
     component: Dashboard,
   },
-  {
-    name: 'Агрокимё калкулятори',
-    path: '/calculator',
-    component: Calculator,
-  },
-  {
-    name: 'Натижалар',
-    path: '/results',
-    exact: true,
-    component: Results,
-  },
-  {
-    name: 'Натижалар',
-    path: '/results/:sampleId',
-    exact: true,
-    component: Sample,
-  },
+  // {
+  //   name: 'Агрокимё калкулятори',
+  //   path: '/calculator',
+  //   component: Calculator,
+  // },
+  // {
+  //   name: 'Натижалар',
+  //   path: '/results',
+  //   exact: true,
+  //   component: Results,
+  // },
+  // {
+  //   name: 'Натижалар',
+  //   path: '/results/:sampleId',
+  //   exact: true,
+  //   component: Sample,
+  // },
   {
     name: 'Шахсий кабинет',
     path: '/account',
