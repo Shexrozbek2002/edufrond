@@ -6,41 +6,6 @@ import 'react-dropzone/examples/theme.css';
 import request from '../../../helpers/createRequest';
 import { method } from 'lodash';
 
-const fetchPost = () => {
-  request.post('final/', {
-    quarantine_type: '',
-    name_latin: '',
-    name_uzb: '',
-    type: '',
-    description: '',
-    country: [],
-    eggs: '',
-    month_eggs: [],
-    day_eggs: '',
-    larva: '',
-    month_larva: [],
-    day_larva: '',
-    fungus: '',
-    month_fungus: [],
-    day_fungus: '',
-    mature: '',
-    month_mature: [],
-    day_mature: '',
-    manipulation: '',
-    month_m: [],
-    day_m: '',
-    prediction: '',
-    product: '',
-    product_hs_code: '',
-    type_product: '',
-    agro_protect: '',
-    bio_protect: '',
-    chemistry_protect: '',
-    photo: [],
-    notes: [],
-    epxperiences: []
-  })
-}
 
 const InstitutionForm = () => {
   const [images, setImages] = useState([]);
@@ -114,6 +79,42 @@ const InstitutionForm = () => {
   //     </li>
   //   ));
 
+  const fetchPost = (data) => {
+    request.post('final/', {
+      quarantine_type: data.quarantine_type,
+      name_latin: data.name_latin,
+      name_uzb: data.name_uzb,
+      type: data.type,
+      description: data.description,
+      country: data.country,
+      eggs: data.eggs,
+      month_eggs: data.month_eggs,
+      day_eggs: data.day_eggs,
+      larva: data.larva,
+      month_larva: data.month_larva,
+      day_larva: data.day_larva,
+      fungus: data.fungus,
+      month_fungus: data.month_fungus,
+      day_fungus: data.day_fungus,
+      mature: data.mature,
+      month_mature: data.month_mature,
+      day_mature: data.day_mature,
+      manipulation: data.manipulation,
+      month_m: data.month_m,
+      day_m: data.day_m,
+      prediction: data.prediction,
+      product: data.product,
+      product_hs_code: data.product_hs_code,
+      type_product: data.type_product,
+      agro_protect: data.agro_protect,
+      bio_protect: data.bio_protect,
+      chemistry_protect: data.chemistry_protect,
+      photo: data.images,
+      notes: data.notes,
+      epxperiences: data.epxperiences
+    }).then(res => {console.log(res)})
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -150,12 +151,14 @@ const InstitutionForm = () => {
       notes: notes,
       epxperiences: experiments
     }
+
+    fetchPost(data);
   }
 
   return (
     <Row>
       <Col md="6" xs="12" className="m-auto">
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label className="text-center d-block">Зарарли организм</Form.Label>
             <Form.Label>Карантин ёки нокарантин</Form.Label>
