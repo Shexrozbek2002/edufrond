@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import DashboardLayout from './layouts/DashboardLayout';
-import AuthContext from './store/auth-context';
 import './vibe/scss/styles.scss';
-import Login from './views/pages/Login/Login';
 import createRequest, { fetchRequest } from './helpers/createRequest';
-import Limit from './views/pages/Limit/Limit';
+// import AuthContext from './store/auth-context';
+// import Login from './views/pages/Login/Login';
+// import Limit from './views/pages/Limit/Limit';
 import InstitutionForm from './views/pages/InstitutionForm/InstitutionForm';
 
 // const getRegions = async () => {
