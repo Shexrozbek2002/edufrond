@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import 'react-dropzone/examples/theme.css';
 import request from '../../../helpers/createRequest';
-import { method } from 'lodash';
+import { method, spread } from 'lodash';
+
+const getCountries = async () => {
+  const countries = await request.get('final/').then(res => res.data);
+  return countries;
+}
 
 
 const InstitutionForm = () => {
+  const [countries, setCountries] = useState([]);
+
+  useEffect(async () => {
+    if(countries.length === 0){
+      const loadedCountries = await getCountries();
+      setCountries(loadedCountries)
+    }
+  }, [])
+
   const [images, setImages] = useState([]);
   const [notes, setNotes] = useState([]);
   const [experiments, setExperiments] = useState([]);
@@ -17,7 +31,7 @@ const InstitutionForm = () => {
   const [nameUzb, setNameUzb] = useState('');
   const [dangerType, setDangerType] = useState('');
   const [description, setDescription] = useState('');
-  const [spreadCountry, setSpreadCountry] = useState('');
+  const [spreadCountry, setSpreadCountry] = useState([]);
 
   const [eggTemp, setEggTemp] = useState('');
   const [emonth, setEmonth] = useState('');
@@ -72,6 +86,10 @@ const InstitutionForm = () => {
     { value: 'sabzavot', label: 'Sabzavot' },
     { value: 'Dukkakli', label: 'Dukkakli' },
   ];
+
+  const loadedCountries = countries.map(c => {
+    return {value: c.id, label: c.name_ru}
+  });
 
   //   const imageFiles = images.map(image => (
   //     <li key={image.name}>
@@ -200,8 +218,10 @@ const InstitutionForm = () => {
 
           <Form.Group>
             <Form.Label>Кенг тарқалган давлатлар</Form.Label>
-            <Select options={options} isMulti value={spreadCountry} onChange={e => {setSpreadCountry(e.target.value)}} />
+            <Select options={loadedCountries} isMulti value={spreadCountry} onChange={e => {setSpreadCountry(e)}} />
+            {spreadCountry.map(i => i.value)}
           </Form.Group>
+          
           <hr></hr>
           <Form.Group>
             <Form.Label className="text-center d-block">Фенологияси</Form.Label>
@@ -211,7 +231,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={emonth} onChange={e => {setEmonth(e.target.value)}} />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={emonth} onChange={e => {setEmonth(e)}} />
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={eday} onChange={e => {setEday(e.target.value)}} />
@@ -224,7 +244,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={lmonth} onChange={e => {setLmonth(e.target.value)}} />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={lmonth} onChange={e => {setLmonth(e)}} />
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={lday} onChange={e => {setLday(e.target.value)}} />
@@ -237,7 +257,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={pmonth} onChange={e => {setPmonth(e.target.value)}}/>
+            <Select placeholder="Ойни танланг" options={options} isMulti value={pmonth} onChange={e => {setPmonth(e)}}/>
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={pday} onChange={e => {setPday(e.target.value)}} />
@@ -250,7 +270,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={imonth} onChange={e => {setImonth(e.target.value)}}/>
+            <Select placeholder="Ойни танланг" options={options} isMulti value={imonth} onChange={e => {setImonth(e)}}/>
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={iday} onChange={e => {setIday(e.target.value)}} />
@@ -263,7 +283,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={rmonth} onChange={e => {setRmonth(e.target.value)}} />
+            <Select placeholder="Ойни танланг" options={options} isMulti value={rmonth} onChange={e => {setRmonth(e)}} />
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={rday} onChange={e => {setRday(e.target.value)}} />
@@ -287,7 +307,7 @@ const InstitutionForm = () => {
 
           <Form.Group>
             <Form.Label>Тури</Form.Label>
-            <Select placeholder="Маҳсулот турини танланг" options={options} isMulti value={productType} onChange={e => {setPorductType(e.target.value)}}/>
+            <Select placeholder="Маҳсулот турини танланг" options={options} isMulti value={productType} onChange={e => {setPorductType(e)}}/>
           </Form.Group>
           <hr></hr>
           <Form.Group>
