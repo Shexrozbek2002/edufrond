@@ -3,8 +3,8 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import DashboardLayout from './layouts/DashboardLayout';
 import './vibe/scss/styles.scss';
 import createRequest, { fetchRequest } from './helpers/createRequest';
-// import AuthContext from './store/auth-context';
-// import Login from './views/pages/Login/Login';
+import AuthContext from './store/auth-context';
+import Login from './views/pages/Login/Login';
 // import Limit from './views/pages/Limit/Limit';
 import InstitutionForm from './views/pages/InstitutionForm/InstitutionForm';
 
@@ -29,7 +29,7 @@ import InstitutionForm from './views/pages/InstitutionForm/InstitutionForm';
 // };
 
 export default function App() {
-  // const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
 
   // useEffect(async () => {
   //   if (authCtx.isLoggedIn && window.location.pathname != '/payment') {
@@ -60,22 +60,17 @@ export default function App() {
 
   return (
     <Switch>
-      {/* {!authCtx.isLoggedIn && (
+      {!authCtx.isLoggedIn && (
         <Route path="/login">
           <Login />
         </Route>
       )}
-      {authCtx.isLoggedIn && (
-        <Route path="/payment">
-          <Limit />
-        </Route>
-      )}
+      
       {authCtx.isLoggedIn && <Route component={DashboardLayout} />}
-      {!authCtx.isLoggedIn && <Redirect to="/login" />} */}
-      <Route component={DashboardLayout} />
-      <Route path="/center">
+      {/* <Route path="/center">
         <InstitutionForm />
-      </Route>
+      </Route> */}
+      {!authCtx.isLoggedIn && <Redirect to="/login" />}
       <Route path="*">
         <Redirect to="/" />
       </Route>
