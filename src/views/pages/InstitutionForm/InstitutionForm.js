@@ -7,18 +7,38 @@ import request from '../../../helpers/createRequest';
 import { method, spread } from 'lodash';
 
 const getCountries = async () => {
-  const countries = await request.get('final/').then(res => res.data);
+  const countries = await request.get('country/').then(res => res.data);
   return countries;
+}
+
+const getMonths = async () => {
+  const months = await request.get('months/').then(res => res.data);
+  return months
+}
+
+const getProductTypes = async () => {
+  const productTypes = await request.get('productypes/').then(res => res.data);
+  return productTypes
 }
 
 
 const InstitutionForm = () => {
   const [countries, setCountries] = useState([]);
+  const [months, setMonths] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
 
   useEffect(async () => {
     if(countries.length === 0){
       const loadedCountries = await getCountries();
       setCountries(loadedCountries)
+    }
+    if(months.length === 0) {
+      const loadedMonths = await getMonths();
+      setMonths(loadedMonths)
+    }
+    if(productTypes.length === 0) {
+      const loadedTypes = await getProductTypes();
+      setProductTypes(loadedTypes);
     }
   }, [])
 
@@ -34,23 +54,23 @@ const InstitutionForm = () => {
   const [spreadCountry, setSpreadCountry] = useState([]);
 
   const [eggTemp, setEggTemp] = useState('');
-  const [emonth, setEmonth] = useState('');
+  const [emonth, setEmonth] = useState([]);
   const [eday, setEday] = useState('');
 
   const [ltemp, setLtemp] = useState(''); //larva (lichinka)
-  const [lmonth, setLmonth] = useState('');
+  const [lmonth, setLmonth] = useState([]);
   const [lday, setLday] = useState('');
 
   const [ptemp, setPtemp] = useState(''); //pupa (g'umbak)
-  const [pmonth, setPmonth] = useState('');
+  const [pmonth, setPmonth] = useState([]);
   const [pday, setPday] = useState('');
 
   const [itemp, setItemp] = useState(''); //imago (yetuk)
-  const [imonth, setImonth] = useState('');
+  const [imonth, setImonth] = useState([]);
   const [iday, setIday] = useState('');
 
   const [rtemp, setRtemp] = useState(''); //reproduction (ko'payish)
-  const [rmonth, setRmonth] = useState('');
+  const [rmonth, setRmonth] = useState([]);
   const [rday, setRday] = useState('');
 
   const [prediction, setPrediction] = useState('');
@@ -90,6 +110,14 @@ const InstitutionForm = () => {
   const loadedCountries = countries.map(c => {
     return {value: c.id, label: c.name_ru}
   });
+
+  const loadedMonths = months.map(m => {
+    return {value: m.id, label: m.month}
+  });
+
+  const loadedTypes = productTypes.map(t => {
+    return {value: t.id, label: t.product}
+  })
 
   //   const imageFiles = images.map(image => (
   //     <li key={image.name}>
@@ -136,15 +164,17 @@ const InstitutionForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const countryValues = spreadCountry.map(c => c.value)
+
     const data = {
       quarantine_type: underQuarantine,
       name_latin: nameLatin,
       name_uzb: nameUzb,
       type: dangerType,
       description: description,
-      country: spreadCountry,
+      country: [...spreadCountry.map(c => c.value.toString())],
       eggs: eggTemp,
-      month_eggs: emonth,
+      month_eggs: emonth.value,
       day_eggs: eday,
       larva: ltemp,
       month_larva: lmonth,
@@ -171,6 +201,7 @@ const InstitutionForm = () => {
     }
 
     fetchPost(data);
+    console.log(data);
   }
 
   return (
@@ -184,8 +215,8 @@ const InstitutionForm = () => {
               <option value="" disabled>
                 Танлаш...
               </option>
-              <option value="yes">Ҳа</option>
-              <option value="no">Йўқ</option>
+              <option value="1">Ҳа</option>
+              <option value="2">Йўқ</option>
             </Form.Select>
           </Form.Group>
           <Form.Group>
@@ -231,7 +262,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={emonth} onChange={e => {setEmonth(e)}} />
+            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={emonth} onChange={e => {setEmonth(e)}} />
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={eday} onChange={e => {setEday(e.target.value)}} />
@@ -244,7 +275,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={lmonth} onChange={e => {setLmonth(e)}} />
+            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={lmonth} onChange={e => {setLmonth(e)}} />
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={lday} onChange={e => {setLday(e.target.value)}} />
@@ -257,7 +288,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={pmonth} onChange={e => {setPmonth(e)}}/>
+            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={pmonth} onChange={e => {setPmonth(e)}}/>
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={pday} onChange={e => {setPday(e.target.value)}} />
@@ -270,7 +301,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={imonth} onChange={e => {setImonth(e)}}/>
+            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={imonth} onChange={e => {setImonth(e)}}/>
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={iday} onChange={e => {setIday(e.target.value)}} />
@@ -283,7 +314,7 @@ const InstitutionForm = () => {
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={options} isMulti value={rmonth} onChange={e => {setRmonth(e)}} />
+            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={rmonth} onChange={e => {setRmonth(e)}} />
           </Form.Group>
           <Form.Group>
             <Form.Control type="text" placeholder="Кун" value={rday} onChange={e => {setRday(e.target.value)}} />
@@ -307,7 +338,7 @@ const InstitutionForm = () => {
 
           <Form.Group>
             <Form.Label>Тури</Form.Label>
-            <Select placeholder="Маҳсулот турини танланг" options={options} isMulti value={productType} onChange={e => {setPorductType(e)}}/>
+            <Select placeholder="Маҳсулот турини танланг" options={loadedTypes} isMulti value={productType} onChange={e => {setPorductType(e)}}/>
           </Form.Group>
           <hr></hr>
           <Form.Group>
