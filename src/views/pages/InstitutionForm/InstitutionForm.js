@@ -3,7 +3,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import 'react-dropzone/examples/theme.css';
-import request from '../../../helpers/createRequest';
+import request, { requestWithFile } from '../../../helpers/createRequest';
 import { method, spread } from 'lodash';
 
 const getCountries = async () => {
@@ -101,12 +101,6 @@ const InstitutionForm = () => {
     }
   };
 
-  const options = [
-    { value: 'meva', label: 'Meva' },
-    { value: 'sabzavot', label: 'Sabzavot' },
-    { value: 'Dukkakli', label: 'Dukkakli' },
-  ];
-
   const loadedCountries = countries.map(c => {
     return {value: c.id, label: c.name_ru}
   });
@@ -126,7 +120,7 @@ const InstitutionForm = () => {
   //   ));
 
   const fetchPost = (data) => {
-    request.post('final/', {
+    requestWithFile.post('final/', {
       quarantine_type: data.quarantine_type,
       name_latin: data.name_latin,
       name_uzb: data.name_uzb,
@@ -155,9 +149,10 @@ const InstitutionForm = () => {
       agro_protect: data.agro_protect,
       bio_protect: data.bio_protect,
       chemistry_protect: data.chemistry_protect,
-      photo: data.images,
-      notes: data.notes,
-      epxperiences: data.epxperiences
+      // photo: data.images,
+      // notes: data.notes,
+      // epxperiences: data.epxperiences
+      file: data.photo
     }).then(res => {console.log(res)})
   }
 

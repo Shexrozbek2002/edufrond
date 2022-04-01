@@ -25,6 +25,13 @@ export const request = axios.create({
   },
 });
 
+export const requestWithFile = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'Content-Type': 'multipart/form-data'
+  },
+});
+
 export const fetchRequest = axios.create({
   baseURL: BASE_URL,
   headers: {
