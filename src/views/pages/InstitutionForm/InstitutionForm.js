@@ -191,8 +191,8 @@ const InstitutionForm = () => {
       bio_protect: bio,
       chemistry_protect: chemic,
       photo: images,
-      notes: notes,
-      epxperiences: experiments
+      note: notes,
+      epxperience: experiments
     }
 
     fetchPost(data);
