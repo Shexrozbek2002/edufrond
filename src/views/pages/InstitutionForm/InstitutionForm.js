@@ -86,6 +86,7 @@ const InstitutionForm = () => {
   const onDropPhoto = acceptedImages => {
     if (acceptedImages.length > 0) {
       setImages(acceptedImages);
+      console.log(images)
     }
   };
 
@@ -149,10 +150,9 @@ const InstitutionForm = () => {
       agro_protect: data.agro_protect,
       bio_protect: data.bio_protect,
       chemistry_protect: data.chemistry_protect,
-      // photo: data.images,
-      // notes: data.notes,
-      // epxperiences: data.epxperiences
-      file: data.photo
+      photo: data.images,
+      notes: data.notes,
+      epxperiences: data.epxperiences
     }).then(res => {console.log(res)})
   }
 
