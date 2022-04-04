@@ -150,9 +150,9 @@ const InstitutionForm = () => {
       agro_protect: data.agro_protect,
       bio_protect: data.bio_protect,
       chemistry_protect: data.chemistry_protect,
-      photo: data.images,
-      notes: data.notes,
-      epxperiences: data.epxperiences
+      photo: data.photo,
+      note: data.note,
+      experiment: data.experiment
     }).then(res => {console.log(res)})
   }
 
@@ -192,7 +192,7 @@ const InstitutionForm = () => {
       chemistry_protect: chemic,
       photo: images,
       note: notes,
-      epxperience: experiments
+      experiment: experiments
     }
 
     fetchPost(data);
