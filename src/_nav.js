@@ -20,20 +20,20 @@ export default {
       url: '/center',
       icon: 'Tablet',
     },
-    {
-      divider: true,
-    },
+    // {
+    //   divider: true,
+    // },
   ],
   bottom: [
-    {
-      name: 'Шахсий кабинет',
-      url: '/account',
-      icon: 'User',
-      badge: {
-        variant: 'success',
-        text: '3',
-      },
-    },
+    // {
+    //   name: 'Шахсий кабинет',
+    //   url: '/account',
+    //   icon: 'User',
+    //   badge: {
+    //     variant: 'success',
+    //     text: '3',
+    //   },
+    // },
   ],
 };
 
