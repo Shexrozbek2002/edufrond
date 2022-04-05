@@ -28,6 +28,8 @@ export const request = axios.create({
 export const requestWithFile = axios.create({
   baseURL: BASE_URL,
   headers: {
+    Authorization: 'Bearer ' + localStorage.getItem('token'),
+    'X-CSRFToken': getCookie('csrftoken'),
     'Content-Type': 'multipart/form-data'
   },
 });
