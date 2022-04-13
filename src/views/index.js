@@ -67,13 +67,13 @@ const pageList = [
     component: InstitutionForm,
   },
   {
-    name: 'Зараркунандалар',
+    name: 'Зарарли организмлар',
     path: '/pests',
     exact: true,
     component: Pests,
   },
   {
-    name: 'Зараркунанда',
+    name: 'Зарарли организм',
     path: '/pests/:pestId',
     exact: true,
     component: Pest,

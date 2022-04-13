@@ -21,7 +21,7 @@ export default {
       icon: 'Tablet',
     },
     {
-      name: 'Зараркунандалар',
+      name: 'Зарарли организмлар',
       url: '/pests',
       icon: 'Database',
     },

@@ -333,7 +333,12 @@ const EditPest = ({match}) => {
     //   formData.append('experiment', experiments[i]);
     // }
 
-    requestWithFile.put(`final/${pestId}`, formData).then(res => {console.log(res)})
+    requestWithFile.put(`final/${pestId}`, formData).then(res => {
+      if(res.status == 202){
+        alert('Маълумот сақланди!')
+        window.location.href = '/pests';
+      }
+    })
 
     // fetchPost(data);
     fetchFiles(images, notes, experiments);

@@ -272,7 +272,11 @@ const InstitutionForm = () => {
     //   formData.append('experiment', experiments[i]);
     // }
 
-    requestWithFile.post('final/', formData).then(res => {console.log(res)})
+    requestWithFile.post('final/', formData).then(res => {
+      if(res.status === 201) {
+        alert('Маълумот киритилди!')
+      }
+    })
 
     // fetchPost(data);
     fetchFiles(images, notes, experiments);
@@ -310,7 +314,7 @@ const InstitutionForm = () => {
               </option>
               <option value="Заракунанда">Заракунанда</option>
               <option value="Бегона ўт">Бегона ўт</option>
-              <option value="Касалик">Касалик</option>
+              <option value="Касаллик">Касаллик</option>
               <option value="Вирус">Вирус</option>
               <option value="Бактерия">Бактерия</option>
             </Form.Select>
