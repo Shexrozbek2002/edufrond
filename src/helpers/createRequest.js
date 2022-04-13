@@ -19,7 +19,7 @@ export function getCookie(name) {
 export const request = axios.create({
   baseURL: BASE_URL,
   headers: {
-    // Authorization: 'Bearer ' + localStorage.getItem('token')
+    Authorization: 'Bearer ' + localStorage.getItem('token'),
     'X-CSRFToken': getCookie('csrftoken'),
     'Content-Type': 'application/json',
   },
@@ -30,7 +30,7 @@ export const requestWithFile = axios.create({
   headers: {
     Authorization: 'Bearer ' + localStorage.getItem('token'),
     'X-CSRFToken': getCookie('csrftoken'),
-    'Content-Type': 'multipart/form-data'
+    'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
   },
 });
 

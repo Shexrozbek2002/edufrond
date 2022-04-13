@@ -16,9 +16,14 @@ export default {
     //   icon: 'Layers',
     // },
     {
-      name: 'Марказ',
+      name: 'Маълумот киритиш',
       url: '/center',
       icon: 'Tablet',
+    },
+    {
+      name: 'Зараркунандалар',
+      url: '/pests',
+      icon: 'Database',
     },
     // {
     //   divider: true,

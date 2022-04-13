@@ -2,11 +2,11 @@ import React, { useContext, useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import DashboardLayout from './layouts/DashboardLayout';
 import './vibe/scss/styles.scss';
-import createRequest, { fetchRequest } from './helpers/createRequest';
+import createRequest, { fetchRequest, request } from './helpers/createRequest';
 import AuthContext from './store/auth-context';
 import Login from './views/pages/Login/Login';
 // import Limit from './views/pages/Limit/Limit';
-import InstitutionForm from './views/pages/InstitutionForm/InstitutionForm';
+// import InstitutionForm from './views/pages/InstitutionForm/InstitutionForm';
 
 // const getRegions = async () => {
 //   const regions = await createRequest.get('regions/').then(res => res.data);
@@ -27,6 +27,21 @@ import InstitutionForm from './views/pages/InstitutionForm/InstitutionForm';
 //   const role = await fetchRequest.get('user/').then(res => res.data);
 //   return role;
 // };
+
+const getCountries = async () => {
+  const countries = await request.get('country/').then(res => res.data);
+  return countries;
+}
+
+const getMonths = async () => {
+  const months = await request.get('months/').then(res => res.data);
+  return months
+}
+
+const getProductTypes = async () => {
+  const productTypes = await request.get('productypes/').then(res => res.data);
+  return productTypes
+}
 
 export default function App() {
   const authCtx = useContext(AuthContext);
@@ -57,6 +72,23 @@ export default function App() {
   //     }
   //   }
   // }, []);
+
+  useEffect(async () => {
+    if(authCtx.isLoggedIn) {
+      if(authCtx.countries.length === 0){
+        const loadedCountries = await getCountries();
+        authCtx.getCountries(loadedCountries)
+      }
+      if(authCtx.months.length === 0) {
+        const loadedMonths = await getMonths();
+        authCtx.getMonths(loadedMonths)
+      }
+      if(authCtx.productTypes.length === 0) {
+        const loadedTypes = await getProductTypes();
+        authCtx.getProductTypes(loadedTypes);
+      }
+    }
+  }, [])
 
   return (
     <Switch>

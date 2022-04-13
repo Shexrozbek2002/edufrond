@@ -3,13 +3,20 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import 'react-dropzone/examples/theme.css';
-import request, { requestWithFile } from '../../../helpers/createRequest';
-import { method, spread } from 'lodash';
+import request, { requestWithFile, fetchRequest } from '../../../helpers/createRequest';
+// import { method, spread } from 'lodash';
 import AuthContext from '../../../store/auth-context';
+import { Loader } from '../../../vibe';
 
 
-const InstitutionForm = () => {
+const EditPest = ({match}) => {
+
+  const pestId = match.params.pestId;
+
   const ctx = useContext(AuthContext);
+
+  const [pest, setPest] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const [images, setImages] = useState([]);
   const [notes, setNotes] = useState([]);
@@ -52,6 +59,60 @@ const InstitutionForm = () => {
   const [bio, setBio] = useState('');
   const [chemic, setChemic] = useState('');
 
+  const getSelectOption = (loadedOpts, data) => {
+      let selectedOptions = [];
+      for(let i = 0; i < data.length; i++) {
+        let ctry = loadedOpts.find(c => c.value === data[i])
+        selectedOptions.push(ctry)
+        console.log(ctry)
+      }
+      return selectedOptions;
+  }
+
+  useEffect(async () => {
+    const pestData = await getPest(pestId);
+    setPest(pestData);
+    setIsLoading(false);
+
+    if(pestData){
+        // console.log(selectedCountries)
+        setUnderQuarantine(pestData.quarantine_type)
+        setNameLatin(pestData.name_latin)
+        setNameUzb(pestData.name_uzb)
+        setDangerType(pestData.type)
+        setDescription(pestData.description)
+        setSpreadCountry(getSelectOption(loadedCountries, pestData.country))
+        setEggTemp(pestData.eggs)
+        setEmonth(getSelectOption(loadedMonths, pestData.month_eggs))
+        setEday(pestData.day_eggs)
+        setLtemp(pestData.larva)
+        setLmonth(getSelectOption(loadedMonths, pestData.month_larva))
+        setLday(pestData.day_larva)
+        setPtemp(pestData.fungus)
+        setPmonth(getSelectOption(loadedMonths, pestData.month_fungus))
+        setPday(pestData.day_fungus)
+        setItemp(pestData.mature)
+        setImonth(getSelectOption(loadedMonths, pestData.month_mature))
+        setIday(pestData.day_mature)
+        setRtemp(pestData.manipulation)
+        setRmonth(getSelectOption(loadedMonths, pestData.month_m))
+        setRday(pestData.day_m)
+        setPrediction(pestData.prediction)
+        setProductName(pestData.product)
+        setProductCode(pestData.product_hs_code)
+        setPorductType(getSelectOption(loadedTypes, pestData.type_product))
+        setAgro(pestData.agro_protect)
+        setBio(pestData.bio_protect)
+        setChemic(pestData.chemistry_protect)
+    }
+  }, []);
+
+  const getPest = async pestId => {
+    setIsLoading(true);
+    const pest = await fetchRequest.get(`final/${pestId}`).then(res => res.data);
+    return pest;
+  };
+
   const onDropPhoto = acceptedImages => {
     if (acceptedImages.length > 0) {
       setImages(acceptedImages);
@@ -89,38 +150,38 @@ const InstitutionForm = () => {
   //     </li>
   //   ));
 
-  const fetchPost = (data) => {
-    request.post('final/', {
-      quarantine_type: data.quarantine_type,
-      name_latin: data.name_latin,
-      name_uzb: data.name_uzb,
-      type: data.type,
-      description: data.description,
-      country: data.country,
-      eggs: data.eggs,
-      month_eggs: data.month_eggs,
-      day_eggs: data.day_eggs,
-      larva: data.larva,
-      month_larva: data.month_larva,
-      day_larva: data.day_larva,
-      fungus: data.fungus,
-      month_fungus: data.month_fungus,
-      day_fungus: data.day_fungus,
-      mature: data.mature,
-      month_mature: data.month_mature,
-      day_mature: data.day_mature,
-      manipulation: data.manipulation,
-      month_m: data.month_m,
-      day_m: data.day_m,
-      prediction: data.prediction,
-      product: data.product,
-      product_hs_code: data.product_hs_code,
-      type_product: data.type_product,
-      agro_protect: data.agro_protect,
-      bio_protect: data.bio_protect,
-      chemistry_protect: data.chemistry_protect,
-    }).then(res => {console.log(res)})
-  }
+//   const fetchPost = (data) => {
+//     request.post('final/', {
+//       quarantine_type: data.quarantine_type,
+//       name_latin: data.name_latin,
+//       name_uzb: data.name_uzb,
+//       type: data.type,
+//       description: data.description,
+//       country: data.country,
+//       eggs: data.eggs,
+//       month_eggs: data.month_eggs,
+//       day_eggs: data.day_eggs,
+//       larva: data.larva,
+//       month_larva: data.month_larva,
+//       day_larva: data.day_larva,
+//       fungus: data.fungus,
+//       month_fungus: data.month_fungus,
+//       day_fungus: data.day_fungus,
+//       mature: data.mature,
+//       month_mature: data.month_mature,
+//       day_mature: data.day_mature,
+//       manipulation: data.manipulation,
+//       month_m: data.month_m,
+//       day_m: data.day_m,
+//       prediction: data.prediction,
+//       product: data.product,
+//       product_hs_code: data.product_hs_code,
+//       type_product: data.type_product,
+//       agro_protect: data.agro_protect,
+//       bio_protect: data.bio_protect,
+//       chemistry_protect: data.chemistry_protect,
+//     }).then(res => {console.log(res)})
+//   }
 
   const fetchFiles = (photo, note, experiment) => {
     if(photo.length !== 0){
@@ -272,7 +333,7 @@ const InstitutionForm = () => {
     //   formData.append('experiment', experiments[i]);
     // }
 
-    requestWithFile.post('final/', formData).then(res => {console.log(res)})
+    requestWithFile.put(`final/${pestId}`, formData).then(res => {console.log(res)})
 
     // fetchPost(data);
     fetchFiles(images, notes, experiments);
@@ -486,4 +547,4 @@ const InstitutionForm = () => {
   );
 };
 
-export default InstitutionForm;
+export default EditPest;

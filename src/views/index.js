@@ -21,11 +21,14 @@ import Modals from './elements/Modals';
 import ProgressBars from './elements/ProgressBars';
 import PaginationPage from './elements/Pagination';
 import ErrorPage from './pages/404';
-import Calculator from './pages/calculation/Calculator';
-import Results from './pages/results/Results';
-import Sample from './pages/results/Sample';
-import ChangePassword from './pages/account/ChangePassword';
+// import Calculator from './pages/calculation/Calculator';
+// import Results from './pages/results/Results';
+// import Sample from './pages/results/Sample';
+// import ChangePassword from './pages/account/ChangePassword';
 import InstitutionForm from './pages/InstitutionForm/InstitutionForm';
+import Pests from './pages/Pests/Pests'
+import Pest from './pages/Pests/Pest';
+import EditPest from './pages/Pests/EditPest';
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
 const pageList = [
@@ -50,18 +53,36 @@ const pageList = [
   //   path: '/results/:sampleId',
   //   exact: true,
   //   component: Sample,
+  // // },
+  // {
+  //   name: 'Шахсий кабинет',
+  //   path: '/account',
+  //   exact: true,
+  //   component: ChangePassword,
   // },
   {
-    name: 'Шахсий кабинет',
-    path: '/account',
-    exact: true,
-    component: ChangePassword,
-  },
-  {
-    name: 'Илмий марказ',
+    name: 'Маълумот киритиш',
     path: '/center',
     exact: true,
     component: InstitutionForm,
+  },
+  {
+    name: 'Зараркунандалар',
+    path: '/pests',
+    exact: true,
+    component: Pests,
+  },
+  {
+    name: 'Зараркунанда',
+    path: '/pests/:pestId',
+    exact: true,
+    component: Pest,
+  },
+  {
+    name: 'Маълумот ўзгартириш',
+    path: '/edit/:pestId',
+    exact: true,
+    component: EditPest,
   },
   {
     name: 'Buttons',
