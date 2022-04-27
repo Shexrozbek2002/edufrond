@@ -46,33 +46,6 @@ const getProductTypes = async () => {
 export default function App() {
   const authCtx = useContext(AuthContext);
 
-  // useEffect(async () => {
-  //   if (authCtx.isLoggedIn && window.location.pathname != '/payment') {
-  //     if (authCtx.role == null) {
-  //       const role = await getRole();
-  //       authCtx.getRole(role.user_role);
-  //     }
-
-  //     if ((authCtx.regions = [])) {
-  //       const regions = await getRegions();
-  //       authCtx.fetchRegion(regions);
-
-  //     }
-
-  //     if ((authCtx.districts = [])) {
-  //       const districts = await getDistricts();
-  //       authCtx.fetchDistrict(districts);
-
-  //     }
-
-  //     if ((authCtx.crops = [])) {
-  //       const crops = await getExpenses();
-  //       authCtx.fetchCrop(crops);
-
-  //     }
-  //   }
-  // }, []);
-
   useEffect(async () => {
     if(authCtx.isLoggedIn) {
       if(authCtx.countries.length === 0){

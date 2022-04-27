@@ -62,7 +62,7 @@ const EditPest = ({match}) => {
   const getSelectOption = (loadedOpts, data) => {
       let selectedOptions = [];
       for(let i = 0; i < data.length; i++) {
-        let ctry = loadedOpts.find(c => c.value === data[i])
+        let ctry = loadedOpts.find(c => c.label === data[i])
         selectedOptions.push(ctry)
         console.log(ctry)
       }
