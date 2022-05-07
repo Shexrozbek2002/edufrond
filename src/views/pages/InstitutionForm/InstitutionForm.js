@@ -6,6 +6,8 @@ import 'react-dropzone/examples/theme.css';
 import request, { requestWithFile } from '../../../helpers/createRequest';
 import { method, spread } from 'lodash';
 import AuthContext from '../../../store/auth-context';
+import { FormGroup, Input, Label } from 'reactstrap';
+import './main.css';
 
 const InstitutionForm = () => {
   const ctx = useContext(AuthContext);
@@ -144,7 +146,7 @@ const InstitutionForm = () => {
       for (let i = 0; i < note.length; i++) {
         noteData.append('note', note[i]);
       }
-      requestWithFile.post('attachment2/', noteData).then(res => {
+      requestWithFile.post('note/', noteData).then(res => {
         console.log(res);
       });
     }
@@ -153,10 +155,24 @@ const InstitutionForm = () => {
       for (let i = 0; i < experiment.length; i++) {
         experimentData.append('experiment', experiment[i]);
       }
-      requestWithFile.post('attachment3/', experimentData).then(res => {
+      requestWithFile.post('experiment/', experimentData).then(res => {
         console.log(res);
       });
     }
+  };
+
+  const isPhenoActive = () => {
+    if (eggTemp || ltemp || ptemp || itemp || rtemp) {
+      return true;
+    }
+    return false;
+  };
+
+  const isProtectionActive = () => {
+    if (agro || bio || chemic) {
+      return true;
+    }
+    return false;
   };
 
   const handleSubmit = e => {
@@ -207,71 +223,79 @@ const InstitutionForm = () => {
       }
     }
 
-    formData.append('eggs', eggTemp);
+    const phenoData = new FormData();
+    phenoData.append('pheno_status', isPhenoActive() ? true : false);
+    phenoData.append('eggs', eggTemp);
     if (emonth.length !== 0) {
       if (emonth.length !== 0) {
         for (let i = 0; i < emonth.length; i++) {
-          formData.append('month_eggs', emonth[i].value);
+          phenoData.append('month_eggs', emonth[i].value);
         }
       }
       // formData.append('month_eggs[]', emonth.map(em => parseInt(em.value)));
     }
-    formData.append('day_eggs', eday);
-    formData.append('larva', ltemp);
+    phenoData.append('day_eggs', eday);
+    phenoData.append('larva', ltemp);
     if (lmonth.length !== 0) {
       if (lmonth.length !== 0) {
         for (let i = 0; i < lmonth.length; i++) {
-          formData.append('month_larva', lmonth[i].value);
+          phenoData.append('month_larva', lmonth[i].value);
         }
       }
       // formData.append('month_larva[]', lmonth.map(lm => parseInt(lm.value)));
     }
-    formData.append('day_larva', lday);
-    formData.append('fungus', ptemp);
+    phenoData.append('day_larva', lday);
+    phenoData.append('fungus', ptemp);
     if (pmonth.length !== 0) {
       if (pmonth.length !== 0) {
         for (let i = 0; i < pmonth.length; i++) {
-          formData.append('month_fungus', pmonth[i].value);
+          phenoData.append('month_fungus', pmonth[i].value);
         }
       }
       // formData.append('month_fungus[]', pmonth.map(pm => parseInt(pm.value)));
     }
-    formData.append('day_fungus', pday);
-    formData.append('mature', itemp);
+    phenoData.append('day_fungus', pday);
+    phenoData.append('mature', itemp);
     if (imonth.length !== 0) {
       if (imonth.length !== 0) {
         for (let i = 0; i < imonth.length; i++) {
-          formData.append('month_mature', imonth[i].value);
+          phenoData.append('month_mature', imonth[i].value);
         }
       }
       // formData.append('month_mature[]', imonth.map(im => parseInt(im.value)));
     }
-    formData.append('day_mature', iday);
-    formData.append('manipulation', rtemp);
+    phenoData.append('day_mature', iday);
+    phenoData.append('manipulation', rtemp);
     if (rmonth.length !== 0) {
       if (rmonth.length !== 0) {
         for (let i = 0; i < rmonth.length; i++) {
-          formData.append('month_m', rmonth[i].value);
+          phenoData.append('month_m', rmonth[i].value);
         }
       }
       // formData.append('month_m[]', rmonth.map(rm => parseInt(rm.value)));
     }
-    formData.append('day_m', rday);
-    formData.append('prediction', prediction);
-    formData.append('product', productName);
-    formData.append('product_hs_code', productCode);
+    phenoData.append('day_m', rday);
+    phenoData.append('prediction', prediction);
+
+    const productData = new FormData();
+
+    productData.append('product', productName);
+    productData.append('product_hs_code', productCode);
     if (productType.length !== 0) {
       if (productType.length !== 0) {
         for (let i = 0; i < productType.length; i++) {
-          formData.append('type_product', productType[i].value);
+          productData.append('type_product', productType[i].value);
         }
       }
       // formData.append('type_product[]', productType.map(pt => parseInt(pt.value)));
     }
 
-    formData.append('agro_protect', agro);
-    formData.append('bio_protect', bio);
-    formData.append('chemistry_protect', chemic);
+    const protectData = new FormData();
+
+    protectData.append('protect_status', isProtectionActive() ? true : false);
+    protectData.append('agro_protect', agro);
+    protectData.append('bio_protect', bio);
+    protectData.append('chemistry_protect', chemic);
 
     // for(let i = 0; i < images.length; i++){
     //   formData.append('photo', images[i]);
@@ -283,11 +307,19 @@ const InstitutionForm = () => {
     //   formData.append('experiment', experiments[i]);
     // }
 
-    requestWithFile.post('final/', formData).then(res => {
-      if (res.status === 201) {
-        alert('Маълумот киритилди!');
-      }
+    requestWithFile.post('research/', formData).then(res => {
+      console.log(res);
     });
+
+    requestWithFile.post('product/', productData).then(res => {
+      console.log(res);
+    });
+
+    // requestWithFile.post('final/', formData).then(res => {
+    //   if (res.status === 201) {
+    //     alert('Маълумот киритилди!');
+    //   }
+    // });
 
     // fetchPost(data);
     fetchFiles(images, notes, experiments);
@@ -420,15 +452,18 @@ const InstitutionForm = () => {
           </Form.Group>
 
           <hr></hr>
-          <Form.Group>
-            <Form.Check
-              label="Фенология"
-              checked={isPhenology}
-              onChange={e => {
-                setIsPhenology(e.target.checked);
-              }}
-            />
-          </Form.Group>
+          <FormGroup check>
+            <Label check>
+              <Input
+                type="checkbox"
+                checked={isPhenology}
+                onChange={e => {
+                  setIsPhenology(e.target.checked);
+                }}
+              />{' '}
+              Фенология
+            </Label>
+          </FormGroup>
 
           {isPhenology && (
             <>
@@ -616,15 +651,18 @@ const InstitutionForm = () => {
           )}
 
           <hr></hr>
-          <Form.Group>
-            <Form.Check
-              label="Қарши кураш"
-              checked={isProtect}
-              onChange={e => {
-                setIsProtect(e.target.checked);
-              }}
-            />
-          </Form.Group>
+          <FormGroup check>
+            <Label check>
+              <Input
+                type="checkbox"
+                checked={isProtect}
+                onChange={e => {
+                  setIsProtect(e.target.checked);
+                }}
+              />{' '}
+              Қарши кураш
+            </Label>
+          </FormGroup>
 
           {isProtect && (
             <>
@@ -662,15 +700,18 @@ const InstitutionForm = () => {
           )}
 
           <hr></hr>
-          <Form.Group>
-            <Form.Check
-              label="Файллар"
-              checked={isFiles}
-              onChange={e => {
-                setIsFiles(e.target.checked);
-              }}
-            />
-          </Form.Group>
+          <FormGroup check>
+            <Label check>
+              <Input
+                type="checkbox"
+                checked={isFiles}
+                onChange={e => {
+                  setIsFiles(e.target.checked);
+                }}
+              />{' '}
+              Файллар
+            </Label>
+          </FormGroup>
 
           {isFiles && (
             <>
