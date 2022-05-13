@@ -224,7 +224,7 @@ const InstitutionForm = () => {
     }
 
     const phenoData = new FormData();
-    phenoData.append('pheno_status', isPhenoActive() ? true : false);
+    phenoData.append('pheno_status', isPhenoActive());
     phenoData.append('eggs', eggTemp);
     if (emonth.length !== 0) {
       if (emonth.length !== 0) {
@@ -292,7 +292,7 @@ const InstitutionForm = () => {
 
     const protectData = new FormData();
 
-    protectData.append('protect_status', isProtectionActive() ? true : false);
+    protectData.append('protect_status', isProtectionActive());
     protectData.append('agro_protect', agro);
     protectData.append('bio_protect', bio);
     protectData.append('chemistry_protect', chemic);
@@ -314,6 +314,11 @@ const InstitutionForm = () => {
     requestWithFile.post('product/', productData).then(res => {
       console.log(res);
     });
+
+    requestWithFile.post('phenology/', phenoData).then(res => {
+      console.log(res);
+    });
+
 
     // requestWithFile.post('final/', formData).then(res => {
     //   if (res.status === 201) {
