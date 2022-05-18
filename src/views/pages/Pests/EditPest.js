@@ -8,14 +8,16 @@ import request, { requestWithFile, fetchRequest } from '../../../helpers/createR
 import AuthContext from '../../../store/auth-context';
 import { Loader } from '../../../vibe';
 
-
-const EditPest = ({match}) => {
-
+const EditPest = ({ match }) => {
   const pestId = match.params.pestId;
 
   const ctx = useContext(AuthContext);
 
   const [pest, setPest] = useState({});
+  const [pestProduct, setPestProduct] = useState({});
+  const [pestPheno, setPestPheno] = useState({});
+  const [pestProtect, setPestProtect] = useState({});
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [images, setImages] = useState([]);
@@ -60,63 +62,93 @@ const EditPest = ({match}) => {
   const [chemic, setChemic] = useState('');
 
   const getSelectOption = (loadedOpts, data) => {
-      let selectedOptions = [];
-      for(let i = 0; i < data.length; i++) {
-        let ctry = loadedOpts.find(c => c.label === data[i])
-        selectedOptions.push(ctry)
-        console.log(ctry)
-      }
-      return selectedOptions;
-  }
+    let selectedOptions = [];
+    for (let i = 0; i < data.length; i++) {
+      let ctry = loadedOpts.find(c => c.label === data[i]);
+      selectedOptions.push(ctry);
+      console.log(ctry);
+    }
+    return selectedOptions;
+  };
 
   useEffect(async () => {
-    const pestData = await getPest(pestId);
+    const pestData = await getPestResearch(pestId);
+    const pestProduct = await getPestProduct(pestId);
+    const pestPheno = await getPestPheno(pestId);
+    const pestProtect = await getPestProtect(pestId);
     setPest(pestData);
+    setPestProduct(pestProduct);
+    setPestPheno(pestPheno);
+    setPestProtect(pestProtect);
     setIsLoading(false);
 
-    if(pestData){
-        // console.log(selectedCountries)
-        setUnderQuarantine(pestData.quarantine_type)
-        setNameLatin(pestData.name_latin)
-        setNameUzb(pestData.name_uzb)
-        setDangerType(pestData.type)
-        setDescription(pestData.description)
-        setSpreadCountry(getSelectOption(loadedCountries, pestData.country))
-        setEggTemp(pestData.eggs)
-        setEmonth(getSelectOption(loadedMonths, pestData.month_eggs))
-        setEday(pestData.day_eggs)
-        setLtemp(pestData.larva)
-        setLmonth(getSelectOption(loadedMonths, pestData.month_larva))
-        setLday(pestData.day_larva)
-        setPtemp(pestData.fungus)
-        setPmonth(getSelectOption(loadedMonths, pestData.month_fungus))
-        setPday(pestData.day_fungus)
-        setItemp(pestData.mature)
-        setImonth(getSelectOption(loadedMonths, pestData.month_mature))
-        setIday(pestData.day_mature)
-        setRtemp(pestData.manipulation)
-        setRmonth(getSelectOption(loadedMonths, pestData.month_m))
-        setRday(pestData.day_m)
-        setPrediction(pestData.prediction)
-        setProductName(pestData.product)
-        setProductCode(pestData.product_hs_code)
-        setPorductType(getSelectOption(loadedTypes, pestData.type_product))
-        setAgro(pestData.agro_protect)
-        setBio(pestData.bio_protect)
-        setChemic(pestData.chemistry_protect)
+    if (pestData) {
+      // console.log(selectedCountries)
+      setUnderQuarantine(pestData.quarantine_type);
+      setNameLatin(pestData.name_latin);
+      setNameUzb(pestData.name_uzb);
+      setDangerType(pestData.type);
+      setDescription(pestData.description);
+      setSpreadCountry(getSelectOption(loadedCountries, pestData.country));
+    }
+
+    if (pestPheno) {
+      setEggTemp(pestPheno.eggs);
+      setEmonth(getSelectOption(loadedMonths, pestPheno.month_eggs));
+      setEday(pestPheno.day_eggs);
+      setLtemp(pestPheno.larva);
+      setLmonth(getSelectOption(loadedMonths, pestPheno.month_larva));
+      setLday(pestPheno.day_larva);
+      setPtemp(pestPheno.fungus);
+      setPmonth(getSelectOption(loadedMonths, pestPheno.month_fungus));
+      setPday(pestPheno.day_fungus);
+      setItemp(pestPheno.mature);
+      setImonth(getSelectOption(loadedMonths, pestPheno.month_mature));
+      setIday(pestPheno.day_mature);
+      setRtemp(pestPheno.manipulation);
+      setRmonth(getSelectOption(loadedMonths, pestPheno.month_m));
+      setRday(pestPheno.day_m);
+      setPrediction(pestPheno.prediction);
+    }
+
+    if (pestProduct) {
+      setProductName(pestProduct.product);
+      setProductCode(pestProduct.product_hs_code);
+      setPorductType(getSelectOption(loadedTypes, pestProduct.type_product));
+    }
+
+    if (pestProtect) {
+      setAgro(pestProtect.agro_protect);
+      setBio(pestProtect.bio_protect);
+      setChemic(pestProtect.chemistry_protect);
     }
   }, []);
 
-  const getPest = async pestId => {
+  const getPestResearch = async pestId => {
     setIsLoading(true);
-    const pest = await fetchRequest.get(`final/${pestId}`).then(res => res.data);
+    const pest = await fetchRequest.get(`research/${pestId}`).then(res => res.data);
     return pest;
+  };
+
+  const getPestProduct = async pestId => {
+    const pestProduct = await fetchRequest.get(`product/${pestId}`).then(res => res.data);
+    return pestProduct;
+  };
+
+  const getPestPheno = async pestId => {
+    const pestPheno = await fetchRequest.get(`phenology/${pestId}`).then(res => res.data);
+    return pestPheno;
+  };
+
+  const getPestProtect = async pestId => {
+    const pestProtect = await fetchRequest.get(`protection/${pestId}`).then(res => res.data);
+    return pestProtect;
   };
 
   const onDropPhoto = acceptedImages => {
     if (acceptedImages.length > 0) {
       setImages(acceptedImages);
-      console.log(images)
+      console.log(images);
     }
   };
 
@@ -133,16 +165,16 @@ const EditPest = ({match}) => {
   };
 
   const loadedCountries = ctx.countries.map(c => {
-    return {value: c.id, label: c.name_ru}
+    return { value: c.id, label: c.name_ru };
   });
 
   const loadedMonths = ctx.months.map(m => {
-    return {value: m.id, label: m.month}
+    return { value: m.id, label: m.month };
   });
 
   const loadedTypes = ctx.productTypes.map(t => {
-    return {value: t.id, label: t.product}
-  })
+    return { value: t.id, label: t.product };
+  });
 
   //   const imageFiles = images.map(image => (
   //     <li key={image.name}>
@@ -150,68 +182,87 @@ const EditPest = ({match}) => {
   //     </li>
   //   ));
 
-//   const fetchPost = (data) => {
-//     request.post('final/', {
-//       quarantine_type: data.quarantine_type,
-//       name_latin: data.name_latin,
-//       name_uzb: data.name_uzb,
-//       type: data.type,
-//       description: data.description,
-//       country: data.country,
-//       eggs: data.eggs,
-//       month_eggs: data.month_eggs,
-//       day_eggs: data.day_eggs,
-//       larva: data.larva,
-//       month_larva: data.month_larva,
-//       day_larva: data.day_larva,
-//       fungus: data.fungus,
-//       month_fungus: data.month_fungus,
-//       day_fungus: data.day_fungus,
-//       mature: data.mature,
-//       month_mature: data.month_mature,
-//       day_mature: data.day_mature,
-//       manipulation: data.manipulation,
-//       month_m: data.month_m,
-//       day_m: data.day_m,
-//       prediction: data.prediction,
-//       product: data.product,
-//       product_hs_code: data.product_hs_code,
-//       type_product: data.type_product,
-//       agro_protect: data.agro_protect,
-//       bio_protect: data.bio_protect,
-//       chemistry_protect: data.chemistry_protect,
-//     }).then(res => {console.log(res)})
-//   }
+  //   const fetchPost = (data) => {
+  //     request.post('final/', {
+  //       quarantine_type: data.quarantine_type,
+  //       name_latin: data.name_latin,
+  //       name_uzb: data.name_uzb,
+  //       type: data.type,
+  //       description: data.description,
+  //       country: data.country,
+  //       eggs: data.eggs,
+  //       month_eggs: data.month_eggs,
+  //       day_eggs: data.day_eggs,
+  //       larva: data.larva,
+  //       month_larva: data.month_larva,
+  //       day_larva: data.day_larva,
+  //       fungus: data.fungus,
+  //       month_fungus: data.month_fungus,
+  //       day_fungus: data.day_fungus,
+  //       mature: data.mature,
+  //       month_mature: data.month_mature,
+  //       day_mature: data.day_mature,
+  //       manipulation: data.manipulation,
+  //       month_m: data.month_m,
+  //       day_m: data.day_m,
+  //       prediction: data.prediction,
+  //       product: data.product,
+  //       product_hs_code: data.product_hs_code,
+  //       type_product: data.type_product,
+  //       agro_protect: data.agro_protect,
+  //       bio_protect: data.bio_protect,
+  //       chemistry_protect: data.chemistry_protect,
+  //     }).then(res => {console.log(res)})
+  //   }
 
-  const fetchFiles = (photo, note, experiment) => {
-    if(photo.length !== 0){
-      const photoData = new FormData();
-      for(let i = 0; i < photo.length; i++){
-        photoData.append('photo', photo[i]);
-      }
-      requestWithFile.post('photo/', photoData).then(res=>{console.log(res)});
-    }
-    if(note.length !== 0){
-      const noteData = new FormData();
-      for(let i = 0; i < note.length; i++){
-        noteData.append('note', note[i]);
-      }
-      requestWithFile.post('attachment2/', noteData).then(res=>{console.log(res)});
-    }
-    if(experiment.length !== 0){
-      const experimentData = new FormData();
-      for(let i = 0; i < experiment.length; i++){
-        experimentData.append('experiment', experiment[i]);
-      }
-      requestWithFile.post('attachment3/', experimentData).then(res=>{console.log(res)});
-    }
-  }
+  // const fetchFiles = (photo, note, experiment) => {
+  //   if (photo.length !== 0) {
+  //     const photoData = new FormData();
+  //     for (let i = 0; i < photo.length; i++) {
+  //       photoData.append('photo', photo[i]);
+  //     }
+  //     requestWithFile.post('photo/', photoData).then(res => {
+  //       console.log(res);
+  //     });
+  //   }
+  //   if (note.length !== 0) {
+  //     const noteData = new FormData();
+  //     for (let i = 0; i < note.length; i++) {
+  //       noteData.append('note', note[i]);
+  //     }
+  //     requestWithFile.post('attachment2/', noteData).then(res => {
+  //       console.log(res);
+  //     });
+  //   }
+  //   if (experiment.length !== 0) {
+  //     const experimentData = new FormData();
+  //     for (let i = 0; i < experiment.length; i++) {
+  //       experimentData.append('experiment', experiment[i]);
+  //     }
+  //     requestWithFile.post('attachment3/', experimentData).then(res => {
+  //       console.log(res);
+  //     });
+  //   }
+  // };
 
+  const isPhenoActive = () => {
+    if (eggTemp || ltemp || ptemp || itemp || rtemp) {
+      return true;
+    }
+    return false;
+  };
 
-  const handleSubmit = (e) => {
+  const isProtectionActive = () => {
+    if (agro || bio || chemic) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleSubmit = e => {
     e.preventDefault();
 
-    const countryValues = spreadCountry.map(c => c.value)
+    const countryValues = spreadCountry.map(c => c.value);
 
     // const data = {
     //   quarantine_type: underQuarantine,
@@ -244,84 +295,108 @@ const EditPest = ({match}) => {
     //   chemistry_protect: chemic,
     // }
 
-
     const formData = new FormData();
     formData.append('quarantine_type', parseInt(underQuarantine));
     formData.append('name_latin', nameLatin);
     formData.append('name_uzb', nameUzb);
     formData.append('type', dangerType);
     formData.append('description', description);
-    if(spreadCountry.length !== 0) {
-      for(let i = 0; i < spreadCountry.length; i++){
-        formData.append('country', spreadCountry[i].value)
+    if (spreadCountry.length !== 0) {
+      for (let i = 0; i < spreadCountry.length; i++) {
+        formData.append('country', spreadCountry[i].value);
       }
     }
-    
-    formData.append('eggs', eggTemp);
-    if(emonth.length !== 0) {
-      if(emonth.length !== 0) {
-        for(let i = 0; i < emonth.length; i++){
-          formData.append('month_eggs', emonth[i].value)
+
+    if (images.length !== 0) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append('photos', images[i]);
+      }
+    }
+
+    if (notes.length !== 0) {
+      for (let i = 0; i < notes.length; i++) {
+        formData.append('notes', notes[i]);
+      }
+    }
+    if (experiments.length !== 0) {
+      for (let i = 0; i < experiments.length; i++) {
+        formData.append('experiments', experiments[i]);
+      }
+    }
+
+    const phenoData = new FormData();
+    phenoData.append('pheno_status', isPhenoActive());
+    phenoData.append('eggs', eggTemp);
+    if (emonth.length !== 0) {
+      if (emonth.length !== 0) {
+        for (let i = 0; i < emonth.length; i++) {
+          phenoData.append('month_eggs', emonth[i].value);
         }
       }
       // formData.append('month_eggs[]', emonth.map(em => parseInt(em.value)));
     }
-    formData.append('day_eggs', eday);
-    formData.append('larva', ltemp);
-    if(lmonth.length !== 0) {
-      if(lmonth.length !== 0) {
-        for(let i = 0; i < lmonth.length; i++){
-          formData.append('month_larva', lmonth[i].value)
+    phenoData.append('day_eggs', eday);
+    phenoData.append('larva', ltemp);
+    if (lmonth.length !== 0) {
+      if (lmonth.length !== 0) {
+        for (let i = 0; i < lmonth.length; i++) {
+          phenoData.append('month_larva', lmonth[i].value);
         }
       }
       // formData.append('month_larva[]', lmonth.map(lm => parseInt(lm.value)));
     }
-    formData.append('day_larva', lday);
-    formData.append('fungus', ptemp);
-    if(pmonth.length !== 0) {
-      if(pmonth.length !== 0) {
-        for(let i = 0; i < pmonth.length; i++){
-          formData.append('month_fungus', pmonth[i].value)
+    phenoData.append('day_larva', lday);
+    phenoData.append('fungus', ptemp);
+    if (pmonth.length !== 0) {
+      if (pmonth.length !== 0) {
+        for (let i = 0; i < pmonth.length; i++) {
+          phenoData.append('month_fungus', pmonth[i].value);
         }
       }
       // formData.append('month_fungus[]', pmonth.map(pm => parseInt(pm.value)));
     }
-    formData.append('day_fungus', pday);
-    formData.append('mature', itemp);
-    if(imonth.length !== 0) {
-      if(imonth.length !== 0) {
-        for(let i = 0; i < imonth.length; i++){
-          formData.append('month_mature', imonth[i].value)
+    phenoData.append('day_fungus', pday);
+    phenoData.append('mature', itemp);
+    if (imonth.length !== 0) {
+      if (imonth.length !== 0) {
+        for (let i = 0; i < imonth.length; i++) {
+          phenoData.append('month_mature', imonth[i].value);
         }
       }
       // formData.append('month_mature[]', imonth.map(im => parseInt(im.value)));
     }
-    formData.append('day_mature', iday);
-    formData.append('manipulation', rtemp);
-    if(rmonth.length !== 0) {
-      if(rmonth.length !== 0) {
-        for(let i = 0; i < rmonth.length; i++){
-          formData.append('month_m', rmonth[i].value)
+    phenoData.append('day_mature', iday);
+    phenoData.append('manipulation', rtemp);
+    if (rmonth.length !== 0) {
+      if (rmonth.length !== 0) {
+        for (let i = 0; i < rmonth.length; i++) {
+          phenoData.append('month_m', rmonth[i].value);
         }
       }
       // formData.append('month_m[]', rmonth.map(rm => parseInt(rm.value)));
     }
-    formData.append('day_m', rday);
-    formData.append('prediction', prediction);
-    formData.append('product', productName);
-    formData.append('product_hs_code', productCode);
-    if(productType.length !== 0) {
-      if(productType.length !== 0) {
-        for(let i = 0; i < productType.length; i++){
-          formData.append('type_product', productType[i].value)
+    phenoData.append('day_m', rday);
+    phenoData.append('prediction', prediction);
+
+    const productData = new FormData();
+
+    productData.append('product', productName);
+    productData.append('product_hs_code', productCode);
+    if (productType.length !== 0) {
+      if (productType.length !== 0) {
+        for (let i = 0; i < productType.length; i++) {
+          productData.append('type_product', productType[i].value);
         }
       }
       // formData.append('type_product[]', productType.map(pt => parseInt(pt.value)));
     }
-    
-    formData.append('agro_protect', agro);
-    formData.append('bio_protect', bio);
-    formData.append('chemistry_protect', chemic);
+
+    const protectData = new FormData();
+
+    protectData.append('protect_status', isProtectionActive());
+    protectData.append('agro_protect', agro);
+    protectData.append('bio_protect', bio);
+    protectData.append('chemistry_protect', chemic);
 
     // for(let i = 0; i < images.length; i++){
     //   formData.append('photo', images[i]);
@@ -333,16 +408,32 @@ const EditPest = ({match}) => {
     //   formData.append('experiment', experiments[i]);
     // }
 
-    requestWithFile.put(`final/${pestId}`, formData).then(res => {
-      if(res.status == 202){
-        alert('Маълумот сақланди!')
-        window.location.href = '/pests';
-      }
-    })
+    // requestWithFile.put(`final/${pestId}`, formData).then(res => {
+    //   if (res.status == 202) {
+    //     alert('Маълумот сақланди!');
+    //     window.location.href = '/pests';
+    //   }
+    // });
+
+    requestWithFile.put(`research/${pestId}`, formData).then(res => {
+      console.log(res);
+    });
+
+    requestWithFile.put(`product/${pestId}`, productData).then(res => {
+      console.log(res);
+    });
+
+    requestWithFile.put(`phenology/${pestId}`, phenoData).then(res => {
+      console.log(res);
+    });
+
+    requestWithFile.put(`protection/${pestId}`, protectData).then(res => {
+      console.log(res);
+    });
 
     // fetchPost(data);
-    fetchFiles(images, notes, experiments);
-  }
+    // fetchFiles(images, notes, experiments);
+  };
 
   return (
     <Row>
@@ -351,7 +442,14 @@ const EditPest = ({match}) => {
           <Form.Group>
             <Form.Label className="text-center d-block">Зарарли организм</Form.Label>
             <Form.Label>Карантин ёки нокарантин</Form.Label>
-            <Form.Select className="form-control" required value={underQuarantine} onChange={e => {setUnderQuarantine(e.target.value)}}>
+            <Form.Select
+              className="form-control"
+              required
+              value={underQuarantine}
+              onChange={e => {
+                setUnderQuarantine(e.target.value);
+              }}
+            >
               <option value="" disabled>
                 Танлаш...
               </option>
@@ -361,16 +459,37 @@ const EditPest = ({match}) => {
           </Form.Group>
           <Form.Group>
             <label>Номи (лотин)</label>
-            <Form.Control type="text" required value={nameLatin} onChange={e => {setNameLatin(e.target.value)}} />
+            <Form.Control
+              type="text"
+              required
+              value={nameLatin}
+              onChange={e => {
+                setNameLatin(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group>
             <label>Номи (ўзб)</label>
-            <Form.Control type="text" required value={nameUzb} onChange={e => {setNameUzb(e.target.value)}} />
+            <Form.Control
+              type="text"
+              required
+              value={nameUzb}
+              onChange={e => {
+                setNameUzb(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Тури</Form.Label>
-            <Form.Select className="form-control" required value={dangerType} onChange={e => {setDangerType(e.target.value)}}>
+            <Form.Select
+              className="form-control"
+              required
+              value={dangerType}
+              onChange={e => {
+                setDangerType(e.target.value);
+              }}
+            >
               <option value="" disabled>
                 Танлаш...
               </option>
@@ -384,114 +503,277 @@ const EditPest = ({match}) => {
 
           <Form.Group>
             <label>Таснифи</label>
-            <Form.Control type="text" value={description} onChange={e => {setDescription(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={description}
+              onChange={e => {
+                setDescription(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Кенг тарқалган давлатлар</Form.Label>
-            <Select options={loadedCountries} isMulti value={spreadCountry} onChange={e => {setSpreadCountry(e)}} />
+            <Select
+              options={loadedCountries}
+              isMulti
+              value={spreadCountry}
+              onChange={e => {
+                setSpreadCountry(e);
+              }}
+            />
           </Form.Group>
-          
+
           <hr></hr>
           <Form.Group>
             <Form.Label className="text-center d-block">Фенологияси</Form.Label>
             <Form.Label className="text-center d-block">Тухум</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" value={eggTemp} onChange={e => {setEggTemp(e.target.value)}}/>
+            <Form.Control
+              type="text"
+              value={eggTemp}
+              onChange={e => {
+                setEggTemp(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={emonth} onChange={e => {setEmonth(e)}} />
+            <Select
+              placeholder="Ойни танланг"
+              options={loadedMonths}
+              isMulti
+              value={emonth}
+              onChange={e => {
+                setEmonth(e);
+              }}
+            />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" value={eday} onChange={e => {setEday(e.target.value)}} />
+            <Form.Control
+              type="text"
+              placeholder="Кун"
+              value={eday}
+              onChange={e => {
+                setEday(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Личинка</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" value={ltemp} onChange={e => {setLtemp(e.target.value)}}/>
+            <Form.Control
+              type="text"
+              value={ltemp}
+              onChange={e => {
+                setLtemp(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={lmonth} onChange={e => {setLmonth(e)}} />
+            <Select
+              placeholder="Ойни танланг"
+              options={loadedMonths}
+              isMulti
+              value={lmonth}
+              onChange={e => {
+                setLmonth(e);
+              }}
+            />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" value={lday} onChange={e => {setLday(e.target.value)}} />
+            <Form.Control
+              type="text"
+              placeholder="Кун"
+              value={lday}
+              onChange={e => {
+                setLday(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Ғумбак</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" value={ptemp} onChange={e => {setPtemp(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={ptemp}
+              onChange={e => {
+                setPtemp(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={pmonth} onChange={e => {setPmonth(e)}}/>
+            <Select
+              placeholder="Ойни танланг"
+              options={loadedMonths}
+              isMulti
+              value={pmonth}
+              onChange={e => {
+                setPmonth(e);
+              }}
+            />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" value={pday} onChange={e => {setPday(e.target.value)}} />
+            <Form.Control
+              type="text"
+              placeholder="Кун"
+              value={pday}
+              onChange={e => {
+                setPday(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Етук зот</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" value={itemp} onChange={e => {setItemp(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={itemp}
+              onChange={e => {
+                setItemp(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={imonth} onChange={e => {setImonth(e)}}/>
+            <Select
+              placeholder="Ойни танланг"
+              options={loadedMonths}
+              isMulti
+              value={imonth}
+              onChange={e => {
+                setImonth(e);
+              }}
+            />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" value={iday} onChange={e => {setIday(e.target.value)}} />
+            <Form.Control
+              type="text"
+              placeholder="Кун"
+              value={iday}
+              onChange={e => {
+                setIday(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className="text-center d-block">Купайиши</Form.Label>
             <label>C°</label>
-            <Form.Control type="text" value={rtemp} onChange={e => {setRtemp(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={rtemp}
+              onChange={e => {
+                setRtemp(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group className="mb-2">
             <label>Даври</label>
-            <Select placeholder="Ойни танланг" options={loadedMonths} isMulti value={rmonth} onChange={e => {setRmonth(e)}} />
+            <Select
+              placeholder="Ойни танланг"
+              options={loadedMonths}
+              isMulti
+              value={rmonth}
+              onChange={e => {
+                setRmonth(e);
+              }}
+            />
           </Form.Group>
           <Form.Group>
-            <Form.Control type="text" placeholder="Кун" value={rday} onChange={e => {setRday(e.target.value)}} />
+            <Form.Control
+              type="text"
+              placeholder="Кун"
+              value={rday}
+              onChange={e => {
+                setRday(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <label>Башорат</label>
-            <Form.Control type="text" value={prediction} onChange={e => {setPrediction(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={prediction}
+              onChange={e => {
+                setPrediction(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <hr></hr>
           <Form.Group>
             <Form.Label className="text-center d-block">Маҳсулот</Form.Label>
             <label>Номи</label>
-            <Form.Control type="text" required value={productName} onChange={e => {setProductName(e.target.value)}}/>
+            <Form.Control
+              type="text"
+              required
+              value={productName}
+              onChange={e => {
+                setProductName(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group>
             <label>ТН ВЭД код</label>
-            <Form.Control type="text" value={productCode} onChange={e => {setProductCode(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={productCode}
+              onChange={e => {
+                setProductCode(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Тури</Form.Label>
-            <Select placeholder="Маҳсулот турини танланг" options={loadedTypes} isMulti value={productType} onChange={e => {setPorductType(e)}}/>
+            <Select
+              placeholder="Маҳсулот турини танланг"
+              options={loadedTypes}
+              isMulti
+              value={productType}
+              onChange={e => {
+                setPorductType(e);
+              }}
+            />
           </Form.Group>
           <hr></hr>
           <Form.Group>
             <Form.Label className="text-center d-block">Қарши кураш</Form.Label>
             <label>Aгротехник</label>
-            <Form.Control type="text" value={agro} onChange={e => {setAgro(e.target.value)}}/>
+            <Form.Control
+              type="text"
+              value={agro}
+              onChange={e => {
+                setAgro(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group>
             <label>Биологик</label>
-            <Form.Control type="text" value={bio} onChange={e => {setBio(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={bio}
+              onChange={e => {
+                setBio(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group>
             <label>Кимёвий</label>
-            <Form.Control type="text" value={chemic} onChange={e => {setChemic(e.target.value)}} />
+            <Form.Control
+              type="text"
+              value={chemic}
+              onChange={e => {
+                setChemic(e.target.value);
+              }}
+            />
           </Form.Group>
           <hr></hr>
           <Form.Group>

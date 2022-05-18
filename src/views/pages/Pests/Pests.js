@@ -15,84 +15,83 @@ const Pests = (props, { location }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [dangerType, setDangerType] = useState('');
- 
+
   const ctx = useContext(AuthContext);
 
-      const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
+  const queryParams = queryString.parse(window.location.search);
 
-      const queryParams = queryString.parse(window.location.search);
+  //   const getSamples = async () => {
+  //     setIsLoading(true);
+  //     const samples = await fetchRequest
+  //       .get('samples', {
+  //         params: {
+  //           page: queryParams.page,
+  //           crop_type: queryParams.crop_type,
+  //           calculation_region: queryParams.calculation_region,
+  //           outline_number: queryParams.outline_number,
+  //         },
+  //       })
+  //       .then(res => res.data)
+  //       .catch(e => {
+  //         alert('Натижалар топилмади!');
+  //       });
+  //     setIsLoading(false);
+  //     return samples;
+  //   };
 
+  const getPests = async () => {
+    setIsLoading(true);
+    const pests = await request
+      .get('researchall/', {
+        params: {
+          page: queryParams.page,
+          type: queryParams.type,
+        },
+      })
+      .then(res => res.data)
+      .catch(e => {
+        alert('Натижалар топилмади!');
+      });
+    setIsLoading(false);
+    return pests;
+  };
 
-    //   const getSamples = async () => {
-    //     setIsLoading(true);
-    //     const samples = await fetchRequest
-    //       .get('samples', {
-    //         params: {
-    //           page: queryParams.page,
-    //           crop_type: queryParams.crop_type,
-    //           calculation_region: queryParams.calculation_region,
-    //           outline_number: queryParams.outline_number,
-    //         },
-    //       })
-    //       .then(res => res.data)
-    //       .catch(e => {
-    //         alert('Натижалар топилмади!');
-    //       });
-    //     setIsLoading(false);
-    //     return samples;
-    //   };
-
-    const getPests = async () => {
-        setIsLoading(true);
-        const pests = await request.get('final/', {
-                  params: {
-                    page: queryParams.page,
-                    type: queryParams.type
-                  }
-                })
-        .then(res=>res.data)
-        .catch(e=>{
-            alert('Натижалар топилмади!')
-        });
-        setIsLoading(false);
-        return pests;
-    }
-
-    useEffect(async () => {
+  useEffect(async () => {
     if (ctx.isLoggedIn) {
-        const pestsData = await getPests();
-        if (pestsData) {
+      const pestsData = await getPests();
+      if (pestsData) {
         setPests(pestsData.results);
         setCount(pestsData.count);
-        }
+      }
     }
-    }, [queryParams.page, queryParams.type]);
+  }, [queryParams.page, queryParams.type]);
 
-      const onFilter = (itemValue, itemKey) => {
-        const rootParams = { ...queryParams };
-        if (itemValue) {
-          rootParams[itemKey] = itemValue;
-          rootParams.page = null;
-        } else {
-          rootParams[itemKey] = null;
-        }
-        props.history.push({ search: queryString.stringify(rootParams, { skipNull: true }) });
-      };
+  const onFilter = (itemValue, itemKey) => {
+    const rootParams = { ...queryParams };
+    if (itemValue) {
+      rootParams[itemKey] = itemValue;
+      rootParams.page = null;
+    } else {
+      rootParams[itemKey] = null;
+    }
+    props.history.push({ search: queryString.stringify(rootParams, { skipNull: true }) });
+  };
 
-      const onPageChange = nextPage => {
-        props.history.push({ search: queryString.stringify({ ...queryParams, page: nextPage }, { skipNull: true }) });
-      };
+  const onPageChange = nextPage => {
+    props.history.push({ search: queryString.stringify({ ...queryParams, page: nextPage }, { skipNull: true }) });
+  };
 
-    //   const deleteSample = async s => {
-    //     if (window.confirm('Намуна натижасини ўчиришни хохлайсизми?')) {
-    //       await fetchRequest.delete('samples/' + s.id).then(res => {
-    //         if (res.status == 204) {
-    //           setSamples(samples.filter(item => item.id != s.id));
-    //         }
-    //       });
-    //     }
-    //   };
+  //   const deleteSample = async s => {
+  //     if (window.confirm('Намуна натижасини ўчиришни хохлайсизми?')) {
+  //       await fetchRequest.delete('samples/' + s.id).then(res => {
+  //         if (res.status == 204) {
+  //           setSamples(samples.filter(item => item.id != s.id));
+  //         }
+  //       });
+  //     }
+  //   };
 
   // const checkDateForDelete = createdAt => {
   //   if (moment(createdAt).isAfter(moment().subtract(1, 'hours'))) {
@@ -104,31 +103,34 @@ const Pests = (props, { location }) => {
   //   }
   // };
 
-    //   const onExport = async () => {
-    //     const res = await fetchRequest
-    //       .get('excel/samples', {
-    //         responseType: 'blob', // important
-    //         params: queryParams,
-    //       })
-    //       .then(response => {
-    //         // const headerLine = response.data.headers['content-disposition']
-    //         const url = window.URL.createObjectURL(new Blob([response.data]));
-    //         const link = document.createElement('a');
-    //         link.href = url;
-    //         link.setAttribute('download', 'Натижалар.xls');
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         link.remove();
-    //         return 1;
-    //       });
-    //   };
+  //   const onExport = async () => {
+  //     const res = await fetchRequest
+  //       .get('excel/samples', {
+  //         responseType: 'blob', // important
+  //         params: queryParams,
+  //       })
+  //       .then(response => {
+  //         // const headerLine = response.data.headers['content-disposition']
+  //         const url = window.URL.createObjectURL(new Blob([response.data]));
+  //         const link = document.createElement('a');
+  //         link.href = url;
+  //         link.setAttribute('download', 'Натижалар.xls');
+  //         document.body.appendChild(link);
+  //         link.click();
+  //         link.remove();
+  //         return 1;
+  //       });
+  //   };
 
   return (
     <Col md="12">
-      <Form.Select className="form-control mb-4" required value={queryParams.type || ''} onChange={e => onFilter(e.target.value, 'type')}>
-        <option value={''}>
-          Заракунанда тури
-        </option>
+      <Form.Select
+        className="form-control mb-4"
+        required
+        value={queryParams.type || ''}
+        onChange={e => onFilter(e.target.value, 'type')}
+      >
+        <option value={''}>Заракунанда тури</option>
         <option value="Заракунанда">Заракунанда</option>
         <option value="Бегона ўт">Бегона ўт</option>
         <option value="Касаллик">Касаллик</option>
@@ -235,10 +237,7 @@ const Pests = (props, { location }) => {
                           </Link>
                         </td>
                         <td>
-                          <Link to={`/edit/${pst.id}`}
-                            className="btn btn-success my-0"
-                            color="danger"
-                          >
+                          <Link to={`/edit/${pst.id}`} className="btn btn-success my-0" color="danger">
                             <i className="fa fa-edit white" />
                           </Link>
                         </td>
@@ -265,7 +264,6 @@ const Pests = (props, { location }) => {
           onChange={p => onPageChange(p)}
         />
       )}
-
     </Col>
   );
 };

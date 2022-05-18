@@ -131,35 +131,35 @@ const InstitutionForm = () => {
       });
   };
 
-  const fetchFiles = (photo, note, experiment) => {
-    if (photo.length !== 0) {
-      const photoData = new FormData();
-      for (let i = 0; i < photo.length; i++) {
-        photoData.append('photo', photo[i]);
-      }
-      requestWithFile.post('photo/', photoData).then(res => {
-        console.log(res);
-      });
-    }
-    if (note.length !== 0) {
-      const noteData = new FormData();
-      for (let i = 0; i < note.length; i++) {
-        noteData.append('note', note[i]);
-      }
-      requestWithFile.post('note/', noteData).then(res => {
-        console.log(res);
-      });
-    }
-    if (experiment.length !== 0) {
-      const experimentData = new FormData();
-      for (let i = 0; i < experiment.length; i++) {
-        experimentData.append('experiment', experiment[i]);
-      }
-      requestWithFile.post('experiment/', experimentData).then(res => {
-        console.log(res);
-      });
-    }
-  };
+  // const fetchFiles = (photo, note, experiment) => {
+  //   if (photo.length !== 0) {
+  //     const photoData = new FormData();
+  //     for (let i = 0; i < photo.length; i++) {
+  //       photoData.append('photo', photo[i]);
+  //     }
+  //     requestWithFile.post('photo/', photoData).then(res => {
+  //       console.log(res);
+  //     });
+  //   }
+  //   if (note.length !== 0) {
+  //     const noteData = new FormData();
+  //     for (let i = 0; i < note.length; i++) {
+  //       noteData.append('note', note[i]);
+  //     }
+  //     requestWithFile.post('note/', noteData).then(res => {
+  //       console.log(res);
+  //     });
+  //   }
+  //   if (experiment.length !== 0) {
+  //     const experimentData = new FormData();
+  //     for (let i = 0; i < experiment.length; i++) {
+  //       experimentData.append('experiment', experiment[i]);
+  //     }
+  //     requestWithFile.post('experiment/', experimentData).then(res => {
+  //       console.log(res);
+  //     });
+  //   }
+  // };
 
   const isPhenoActive = () => {
     if (eggTemp || ltemp || ptemp || itemp || rtemp) {
@@ -220,6 +220,23 @@ const InstitutionForm = () => {
     if (spreadCountry.length !== 0) {
       for (let i = 0; i < spreadCountry.length; i++) {
         formData.append('country', spreadCountry[i].value);
+      }
+    }
+
+    if (images.length !== 0) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append('photos', images[i]);
+      }
+    }
+
+    if (notes.length !== 0) {
+      for (let i = 0; i < notes.length; i++) {
+        formData.append('notes', notes[i]);
+      }
+    }
+    if (experiments.length !== 0) {
+      for (let i = 0; i < experiments.length; i++) {
+        formData.append('experiments', experiments[i]);
       }
     }
 
@@ -319,6 +336,9 @@ const InstitutionForm = () => {
       console.log(res);
     });
 
+    requestWithFile.post('protection/', protectData).then(res => {
+      console.log(res);
+    });
 
     // requestWithFile.post('final/', formData).then(res => {
     //   if (res.status === 201) {
@@ -327,7 +347,8 @@ const InstitutionForm = () => {
     // });
 
     // fetchPost(data);
-    fetchFiles(images, notes, experiments);
+
+    // fetchFiles(images, notes, experiments);
   };
 
   return (
