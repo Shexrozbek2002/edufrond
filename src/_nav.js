@@ -25,6 +25,11 @@ export default {
       url: '/pests',
       icon: 'Database',
     },
+    {
+      name: 'Рейтинг дафтарчаси',
+      url: '/newtable',
+      icon: 'Tablet',
+    },
     // {
     //   divider: true,
     // },

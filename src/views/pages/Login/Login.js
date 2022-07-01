@@ -1,10 +1,10 @@
 import React, { useState, useRef, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
-
 import { authRequest } from '../../../helpers/createRequest';
 import AuthContext from '../../../store/auth-context';
 import classes from './Login.module.css';
-
+import { FaUserAlt } from "react-icons/fa";
+import './LoginNewCss.css'
 const Login = props => {
   //   const history = useNavigate();
   const usernameRef = useRef();
@@ -43,25 +43,40 @@ const Login = props => {
   };
 
   return (
-    <section className={classes.auth}>
-      <h1>{isLogin ? 'Тизимга кириш' : "Рўйхатдан ўтиш"}</h1>
-      <form onSubmit={submitHandler}>
-        <div className={classes.control}>
-          <label htmlFor="email">Исм</label>
-          <input type="text" id="username" placeholder="Исм" ref={usernameRef} required />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="password">Парол</label>
-          <input type="password" id="password" placeholder="Парол" ref={passwordRef} required />
-        </div>
-        <div className={classes.actions}>
-          <button>{isLogin ? 'Кириш' : 'Яратиш'}</button>
-          <button type="button" className={classes.toggle} onClick={switchAuthModeHandler}>
-            {isLogin ? "Рўйхатдан ўтиш" : 'Мавжуд фойдаланувчи сифатида кириш'}
-          </button>
-        </div>
-      </form>
-    </section>
+    <div className="head">
+
+      <div className="head-left">
+        <img src="/static/media/study.svg" alt="" />
+      </div>
+
+      <div className="head-rigth">
+         {/* className={classes.auth} */}
+         <section className='box-auth'>
+            <h1>{isLogin ? 'Тизимга кириш' : "Рўйхатдан ўтиш"}</h1>
+            <form onSubmit={submitHandler}>
+            {/* className={classes.control} */}
+              <div className='box-login'>
+                <label htmlFor="email">Логин</label>
+                <input type="text" id="username" placeholder="Enter your login..." ref={usernameRef} required />
+              </div>
+              {/* className={classes.control} */}
+              <div className='box-login'>
+                <label htmlFor="password">Парол</label>
+                <input type="password" id="password" placeholder="Enter your password" ref={passwordRef} required />
+              </div>
+              {/* className={classes.actions} */}
+              <div className='button_block'>
+                  <button className='btn-login'>{isLogin ? 'Кириш' : 'Яратиш'}</button>
+                  <button type="button"  className='btn-login' onClick={switchAuthModeHandler}>
+                    {isLogin ? "Рўйхатдан ўтиш" : 'Мавжуд фойдаланувчи сифатида кириш'}
+                  </button>
+              </div>
+            </form>
+         </section>
+      </div>
+    
+    </div>
+   
   );
 };
 

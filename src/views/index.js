@@ -25,10 +25,16 @@ import Dashboard from './pages/Dashboard';
 // import Results from './pages/results/Results';
 // import Sample from './pages/results/Sample';
 // import ChangePassword from './pages/account/ChangePassword';
-import InstitutionForm from './pages/InstitutionForm/InstitutionForm';
+//import InstitutionForm from './pages/InstitutionForm/InstitutionForm';
 import Pests from './pages/Pests/Pests'
 import Pest from './pages/Pests/Pest';
 import EditPest from './pages/Pests/EditPest';
+import NewTable from './pages/NewTable/NewTable';
+ import NewInstitutionFormTeleg from './pages/InstitutionForm/NewInstitutionFormTeleg';
+ import InstitutionFormNew from './pages/InstitutionForm/InstitutionFormNew';
+ import NewEditPest from './pages/Pests/NewEditPest'
+//import InstitutionForm from './pages/InstitutionForm/InstitutionForm';
+//import InstitutionForm from './pages/InstitutionForm/InstitutionForm';
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
 const pageList = [
@@ -64,7 +70,7 @@ const pageList = [
     name: 'Маълумот киритиш',
     path: '/center',
     exact: true,
-    component: InstitutionForm,
+    component: InstitutionFormNew,
   },
   {
     name: 'Зарарли организмлар',
@@ -82,7 +88,13 @@ const pageList = [
     name: 'Маълумот ўзгартириш',
     path: '/edit/:pestId',
     exact: true,
-    component: EditPest,
+    component: NewEditPest,
+  },
+  {
+    name: 'Рейтинг дафтарчаси',
+    path: '/newtable',
+    exact: true,
+    component: NewTable,
   },
   // {
   //   name: 'Buttons',

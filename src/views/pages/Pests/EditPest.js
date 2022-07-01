@@ -1,14 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
-import Select from 'react-select';
 import 'react-dropzone/examples/theme.css';
-import request, { requestWithFile, fetchRequest } from '../../../helpers/createRequest';
+import Select from 'react-select';
+import { fetchRequest, requestWithFile } from '../../../helpers/createRequest';
 // import { method, spread } from 'lodash';
 import AuthContext from '../../../store/auth-context';
-import { Loader } from '../../../vibe';
+import {withRouter} from "react-router-dom"
+import axios from 'axios';
+const EditPest = ({ match,history }) => {
 
-const EditPest = ({ match }) => {
+  const handleHistory = () => {
+    history.push('/pests')
+  }
+ 
+  const[allIdInformation,setAllIdInformation] = useState({
+    all_phenologyId:null,
+    all_productId:null,
+    all_protectId:null,
+    all_research:null,
+  })
+
+
+
   const pestId = match.params.pestId;
 
   const ctx = useContext(AuthContext);
@@ -61,12 +75,20 @@ const EditPest = ({ match }) => {
   const [bio, setBio] = useState('');
   const [chemic, setChemic] = useState('');
 
+
+
+
+
+
   const getSelectOption = (loadedOpts, data) => {
     let selectedOptions = [];
     for (let i = 0; i < data.length; i++) {
       let ctry = loadedOpts.find(c => c.label === data[i]);
-      selectedOptions.push(ctry);
-      console.log(ctry);
+      if(ctry){   
+         selectedOptions.push(ctry);
+     
+      }
+    
     }
     return selectedOptions;
   };
@@ -83,7 +105,7 @@ const EditPest = ({ match }) => {
     setIsLoading(false);
 
     if (pestData) {
-      // console.log(selectedCountries)
+    
       setUnderQuarantine(pestData.quarantine_type);
       setNameLatin(pestData.name_latin);
       setNameUzb(pestData.name_uzb);
@@ -125,13 +147,18 @@ const EditPest = ({ match }) => {
   }, []);
 
   const getPestResearch = async pestId => {
-    setIsLoading(true);
-    const pest = await fetchRequest.get(`research/${pestId}`).then(res => res.data);
+    if(allIdInformation.all_research !== null){
+       setIsLoading(true);
+    const pest = await fetchRequest.get(`research/${allIdInformation.all_research}`).then(res => res.data);
     return pest;
+
+    }
+   
   };
+  
 
   const getPestProduct = async pestId => {
-    const pestProduct = await fetchRequest.get(`product/${pestId}`).then(res => res.data);
+    const pestProduct = await fetchRequest.get(`product/${allIdInformation['all_product'] ? allIdInformation.all_product: null}}`).then(res => res.data);
     return pestProduct;
   };
 
@@ -148,7 +175,7 @@ const EditPest = ({ match }) => {
   const onDropPhoto = acceptedImages => {
     if (acceptedImages.length > 0) {
       setImages(acceptedImages);
-      console.log(images);
+    
     }
   };
 
@@ -212,7 +239,7 @@ const EditPest = ({ match }) => {
   //       agro_protect: data.agro_protect,
   //       bio_protect: data.bio_protect,
   //       chemistry_protect: data.chemistry_protect,
-  //     }).then(res => {console.log(res)})
+  //  
   //   }
 
   // const fetchFiles = (photo, note, experiment) => {
@@ -259,10 +286,29 @@ const EditPest = ({ match }) => {
     return false;
   };
 
+  const isFormDataActive = () => {
+    if(nameLatin || nameUzb || dangerType || description ){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  const isProductDataActive = () => {
+    if(productName || productCode){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    const countryValues = spreadCountry.map(c => c.value);
+    // const countryValues = spreadCountry.map(c => c.value);
 
     // const data = {
     //   quarantine_type: underQuarantine,
@@ -296,6 +342,7 @@ const EditPest = ({ match }) => {
     // }
 
     const formData = new FormData();
+    formData.append('form_status', isFormDataActive());
     formData.append('quarantine_type', parseInt(underQuarantine));
     formData.append('name_latin', nameLatin);
     formData.append('name_uzb', nameUzb);
@@ -303,19 +350,25 @@ const EditPest = ({ match }) => {
     formData.append('description', description);
     if (spreadCountry.length !== 0) {
       for (let i = 0; i < spreadCountry.length; i++) {
-        formData.append('country', spreadCountry[i].value);
+        if(spreadCountry[i]){
+          formData.append('country', spreadCountry[i].value);
+        }
       }
     }
 
     if (images.length !== 0) {
       for (let i = 0; i < images.length; i++) {
-        formData.append('photos', images[i]);
+        if(images[i]){
+          formData.append('photos', images[i]);
+        }
       }
     }
 
     if (notes.length !== 0) {
       for (let i = 0; i < notes.length; i++) {
-        formData.append('notes', notes[i]);
+        if(notes[i]){
+          formData.append('notes', notes[i]);
+        }
       }
     }
     if (experiments.length !== 0) {
@@ -330,7 +383,9 @@ const EditPest = ({ match }) => {
     if (emonth.length !== 0) {
       if (emonth.length !== 0) {
         for (let i = 0; i < emonth.length; i++) {
-          phenoData.append('month_eggs', emonth[i].value);
+          if(emonth[i]){
+            phenoData.append('month_eggs', emonth[i].value);
+          }
         }
       }
       // formData.append('month_eggs[]', emonth.map(em => parseInt(em.value)));
@@ -340,7 +395,9 @@ const EditPest = ({ match }) => {
     if (lmonth.length !== 0) {
       if (lmonth.length !== 0) {
         for (let i = 0; i < lmonth.length; i++) {
-          phenoData.append('month_larva', lmonth[i].value);
+          if(lmonth[i]){
+            phenoData.append('month_larva', lmonth[i].value);
+          }
         }
       }
       // formData.append('month_larva[]', lmonth.map(lm => parseInt(lm.value)));
@@ -350,7 +407,9 @@ const EditPest = ({ match }) => {
     if (pmonth.length !== 0) {
       if (pmonth.length !== 0) {
         for (let i = 0; i < pmonth.length; i++) {
-          phenoData.append('month_fungus', pmonth[i].value);
+          if(pmonth[i]){
+            phenoData.append('month_fungus', pmonth[i].value);
+          }
         }
       }
       // formData.append('month_fungus[]', pmonth.map(pm => parseInt(pm.value)));
@@ -360,7 +419,9 @@ const EditPest = ({ match }) => {
     if (imonth.length !== 0) {
       if (imonth.length !== 0) {
         for (let i = 0; i < imonth.length; i++) {
-          phenoData.append('month_mature', imonth[i].value);
+          if(imonth[i]){
+            phenoData.append('month_mature', imonth[i].value);
+          }
         }
       }
       // formData.append('month_mature[]', imonth.map(im => parseInt(im.value)));
@@ -370,7 +431,9 @@ const EditPest = ({ match }) => {
     if (rmonth.length !== 0) {
       if (rmonth.length !== 0) {
         for (let i = 0; i < rmonth.length; i++) {
-          phenoData.append('month_m', rmonth[i].value);
+          if(rmonth[i]){
+            phenoData.append('month_m', rmonth[i].value);
+          }
         }
       }
       // formData.append('month_m[]', rmonth.map(rm => parseInt(rm.value)));
@@ -379,16 +442,15 @@ const EditPest = ({ match }) => {
     phenoData.append('prediction', prediction);
 
     const productData = new FormData();
-
+    productData.append('product_status',isProductDataActive())
     productData.append('product', productName);
     productData.append('product_hs_code', productCode);
     if (productType.length !== 0) {
-      if (productType.length !== 0) {
-        for (let i = 0; i < productType.length; i++) {
+      for (let i = 0; i < productType.length; i++) {
+        if(productType[i]){
           productData.append('type_product', productType[i].value);
         }
       }
-      // formData.append('type_product[]', productType.map(pt => parseInt(pt.value)));
     }
 
     const protectData = new FormData();
@@ -415,21 +477,32 @@ const EditPest = ({ match }) => {
     //   }
     // });
 
-    requestWithFile.put(`research/${pestId}`, formData).then(res => {
-      console.log(res);
-    });
-
-    requestWithFile.put(`product/${pestId}`, productData).then(res => {
-      console.log(res);
-    });
-
-    requestWithFile.put(`phenology/${pestId}`, phenoData).then(res => {
-      console.log(res);
-    });
-
-    requestWithFile.put(`protection/${pestId}`, protectData).then(res => {
-      console.log(res);
-    });
+    Promise.all(
+      [new Promise( resolve => {
+        requestWithFile.put(`research/${pestId}`, formData).then(res => {
+          resolve(res)
+        })
+      }),
+      new Promise( resolve => {
+        requestWithFile.put(`product/${pestId}`, productData).then(res => {
+          resolve(res);
+        })
+      }),
+      new Promise( resolve => {
+        
+      requestWithFile.put(`phenology/${pestId}`, phenoData).then(res => {
+        resolve(res);
+      })
+      }),
+      new Promise( resolve => {
+        
+        requestWithFile.put(`protection/${pestId}`, protectData).then(res => {
+          resolve(res);
+        })
+        })]
+    ).then(() => {
+      handleHistory()
+    })
 
     // fetchPost(data);
     // fetchFiles(images, notes, experiments);
@@ -834,4 +907,4 @@ const EditPest = ({ match }) => {
   );
 };
 
-export default EditPest;
+export default withRouter(EditPest);

@@ -8,8 +8,10 @@ import { method, spread } from 'lodash';
 import AuthContext from '../../../store/auth-context';
 import { FormGroup, Input, Label } from 'reactstrap';
 import './main.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const InstitutionForm = () => {
+const NewInstitutionFormTeleg = () => {
   const ctx = useContext(AuthContext);
 
   const [images, setImages] = useState([]);
@@ -75,18 +77,21 @@ const InstitutionForm = () => {
       setExperiments(acceptedtExperiments);
     }
   };
-
-  const loadedCountries = ctx.countries.map(c => {
+  
+  
+    const loadedCountries =Array.isArray(ctx) ? ctx.countries.map(c => {
     return { value: c.id, label: c.name_ru };
-  });
+    }):[];
+  
+  
 
-  const loadedMonths = ctx.months.map(m => {
+  const loadedMonths =Array.isArray(ctx) ? ctx.months.map(m => {
     return { value: m.id, label: m.month };
-  });
+  }):[];
 
-  const loadedTypes = ctx.productTypes.map(t => {
+  const loadedTypes =Array.isArray(ctx) ? ctx.productTypes.map(t => {
     return { value: t.id, label: t.product };
-  });
+  }):[];
 
   //   const imageFiles = images.map(image => (
   //     <li key={image.name}>
@@ -131,35 +136,58 @@ const InstitutionForm = () => {
       });
   };
 
-  // const fetchFiles = (photo, note, experiment) => {
-  //   if (photo.length !== 0) {
-  //     const photoData = new FormData();
-  //     for (let i = 0; i < photo.length; i++) {
-  //       photoData.append('photo', photo[i]);
-  //     }
-  //     requestWithFile.post('photo/', photoData).then(res => {
-  //       console.log(res);
-  //     });
-  //   }
-  //   if (note.length !== 0) {
-  //     const noteData = new FormData();
-  //     for (let i = 0; i < note.length; i++) {
-  //       noteData.append('note', note[i]);
-  //     }
-  //     requestWithFile.post('note/', noteData).then(res => {
-  //       console.log(res);
-  //     });
-  //   }
-  //   if (experiment.length !== 0) {
-  //     const experimentData = new FormData();
-  //     for (let i = 0; i < experiment.length; i++) {
-  //       experimentData.append('experiment', experiment[i]);
-  //     }
-  //     requestWithFile.post('experiment/', experimentData).then(res => {
-  //       console.log(res);
-  //     });
-  //   }
-  // };
+
+  const [firstFiles, setFirstFiles] = useState([])
+  const [lastFiles, setLastFiles] = useState([])
+  const [secondFiles, setSecondFiles] = useState([])
+  // files comment //
+
+   /* ****************  */
+    
+  const [imageFilesStatus, setImageFileStatus] = useState(false);
+  const [noteFilesStatus, setNoteFileStatus] = useState(false);
+  const [exprimentFilesStatus, setExprimentFileStatus] = useState(false);
+
+
+
+
+  const fetchFiles = (photo, note, experiment) => {
+    if (photo.length !== 0) {
+      const photoData = new FormData();
+      for (let i = 0; i < photo.length; i++) {
+        setFirstFiles(photo[i])
+        photoData.append('photo', photo[i]);
+      }
+      requestWithFile.post('photo/', photoData).then(res => {
+        console.log(res);
+      });
+    }
+    if (note.length !== 0) {
+      const noteData = new FormData();
+      for (let i = 0; i < note.length; i++) {
+        setLastFiles(note[i])
+        noteData.append('note', note[i]);
+      }
+      requestWithFile.post('note/', noteData).then(res => {
+        console.log(res);
+      });
+    }
+    if (experiment.length !== 0) {
+      const experimentData = new FormData();
+      for (let i = 0; i < experiment.length; i++) {
+        setSecondFiles(experiment[i])
+        experimentData.append('experiment', experiment[i]);
+      }
+      requestWithFile.post('experiment/', experimentData).then(res => {
+        console.log(res);
+      });
+    }
+  };
+  // files comment //
+
+
+
+
 
   const isPhenoActive = () => {
     if (eggTemp || ltemp || ptemp || itemp || rtemp) {
@@ -175,43 +203,67 @@ const InstitutionForm = () => {
     return false;
   };
 
+
+  const isFormDataActive = () => {
+    if(nameLatin || nameUzb || dangerType || description ){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  const isProductDataActive = () => {
+    if(productName || productCode){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+
+
+  const [onePostCheck, setOnePostCheck] = useState(false)
+  const [twoPostCheck, setTwoPostCheck] = useState(false)
+  const [threePostCheck, setThreePostCheck] = useState(false)
+  const [fourPostCheck, setFourPostCheck] = useState(false)
+
+  useEffect(() => {
+    if(images.length > 0){
+      setImageFileStatus(true)
+    }
+    else{
+      setImageFileStatus(false)
+    }
+    if(notes.length > 0){
+      setNoteFileStatus(true)
+    }
+    else{
+      setNoteFileStatus(false)
+    }
+    if(experiments.length > 0){
+      setExprimentFileStatus(true)
+    }
+    else{
+      setExprimentFileStatus(false)
+    }
+  },[images,notes,experiments])
+
+
+
+
+
+
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    const countryValues = spreadCountry.map(c => c.value);
+   // const countryValues = spreadCountry.map(c => c.value);
 
-    // const data = {
-    //   quarantine_type: underQuarantine,
-    //   name_latin: nameLatin,
-    //   name_uzb: nameUzb,
-    //   type: dangerType,
-    //   description: description,
-    //   country: [...spreadCountry.map(c => c.value)],
-    //   eggs: eggTemp,
-    //   month_eggs: [...emonth.map(em => em.value)],
-    //   day_eggs: eday,
-    //   larva: ltemp,
-    //   month_larva: [...lmonth.map(lm => lm.value)],
-    //   day_larva: lday,
-    //   fungus: ptemp,
-    //   month_fungus: [...pmonth.map(pm => pm.value)],
-    //   day_fungus: pday,
-    //   mature: itemp,
-    //   month_mature: [...imonth.map(im => im.value)],
-    //   day_mature: iday,
-    //   manipulation: rtemp,
-    //   month_m: [...rmonth.map(rm => rm.value)],
-    //   day_m: rday,
-    //   prediction: prediction,
-    //   product: productName,
-    //   product_hs_code: productCode,
-    //   type_product: [...productType.map(pt => pt.value)],
-    //   agro_protect: agro,
-    //   bio_protect: bio,
-    //   chemistry_protect: chemic,
-    // }
 
     const formData = new FormData();
+    formData.append('form_status', isFormDataActive());
     formData.append('quarantine_type', parseInt(underQuarantine));
     formData.append('name_latin', nameLatin);
     formData.append('name_uzb', nameUzb);
@@ -295,7 +347,7 @@ const InstitutionForm = () => {
     phenoData.append('prediction', prediction);
 
     const productData = new FormData();
-
+    productData.append('product_status',isProductDataActive())
     productData.append('product', productName);
     productData.append('product_hs_code', productCode);
     if (productType.length !== 0) {
@@ -324,21 +376,80 @@ const InstitutionForm = () => {
     //   formData.append('experiment', experiments[i]);
     // }
 
-    requestWithFile.post('research/', formData).then(res => {
+   /* requestWithFile.post('research/', formData).then(res => {
       console.log(res);
+      console.log("Qaytgan status: ", res.status);
+      if(res.status==201){
+        setOnePostCheck(true)
+      }
     });
+    */
 
-    requestWithFile.post('product/', productData).then(res => {
+  /*  requestWithFile.post('product/', productData).then(res => {
       console.log(res);
-    });
+      console.log("Qaytgan status: ", res.status);
+      if(res.status==201){
+        toast.success("Kiritilgan ma'lumot bazaga qo'shildi!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+      }
+      setNameLatin("");
+      setUnderQuarantine("");
+      setNameUzb("");
+      setDangerType("");
+      setDescription("");
+      setSpreadCountry([]);
+      setProductName("");
+      setProductCode("");
+      setPorductType([]);
+      setIsPhenology(false);
+      setEggTemp('');
+      setEmonth([]);
+      setEday("");
+      setLtemp("");
+      setLmonth([]);
+      setLday('');
+      setPtemp("");
+      setPmonth([]);
+      setPday("");
+      setItemp("");
+      setImonth([]);
+      setIday('');
+      setRtemp('');
+      setRmonth([]);
+      setRday('');
+      setPrediction('');
+      setIsProtect(false);
+      setAgro('');
+      setBio('');
+      setChemic('');
+      setIsFiles(false)
+    });*/
 
-    requestWithFile.post('phenology/', phenoData).then(res => {
+   /* requestWithFile.post('phenology/', phenoData).then(res => {
       console.log(res);
-    });
+      console.log("Qaytgan status: ", res.status);
+      if(res.status==201){
+        setThreePostCheck(true)
+      }
+    });*/
 
-    requestWithFile.post('protection/', protectData).then(res => {
+    // comment post 4
+   /* requestWithFile.post('protection/', protectData).then(res => {
       console.log(res);
-    });
+      console.log("Qaytgan status: ", res.status);
+      if(res.status==201){
+        setFourPostCheck(true)
+      }
+    });*/
+
+
 
     // requestWithFile.post('final/', formData).then(res => {
     //   if (res.status === 201) {
@@ -346,15 +457,120 @@ const InstitutionForm = () => {
     //   }
     // });
 
-    // fetchPost(data);
+   // fetchPost(data);
 
-    // fetchFiles(images, notes, experiments);
+   //  fetchFiles(images, notes, experiments);
+
+   const allInformationJsonFile = new FormData();
+ 
+   if(images.length !== 0){
+    
+    for(let i = 0; i < images.length; i++){
+        allInformationJsonFile.append('photo', images[i]);
+    }
+    }
+ if(notes.length !== 0){
+ 
+  for(let i = 0; i < notes.length; i++){
+    allInformationJsonFile.append('note', notes[i]);
+  }
+ } 
+ 
+ if(experiments.length !== 0){
+  
+  for(let i = 0; i < experiments.length; i++){
+    allInformationJsonFile.append('experiment', experiments[i]);
+  }
+ }
+ 
+
+
+
+
+
+   const allNewJsonForm = `{
+    "all_research": { 
+      "quarantine_type": ${parseInt(underQuarantine)},
+      "name_latin": ${(nameLatin) ? `"${nameLatin}"` : null },
+      "name_uzb": ${(nameUzb) ? `"${nameUzb}"` : null},
+      "type": ${(dangerType) ? `"${dangerType}"` : null},
+      "description": ${(description) ? `"${description}"` : null},
+      "country":${(spreadCountry.length) ? `"${spreadCountry}"` : "[]"}
+  },
+  "all_product": {
+      "product_hs_code": ${(productCode) ? `"${productCode}" `: null},
+      "product": [1],
+      "product_status": ${true},
+      "confirmation_status":${true},
+      "type_product":${(productType.length) ? `"${productType}"` : "sshe"}
+  },
+  "all_phenology": {
+      "eggs":${(eggTemp) ? `"${eggTemp}" `: null},
+      "day_eggs": ${(eday) ? `"${eday}"` : null},
+      "larva": ${(ltemp) ? `"${ltemp}"` : null},
+      "day_larva": ${(lday) ? `"${lday}"` : null},
+      "fungus": ${(ptemp) ? `"${ptemp}"` : null},
+      "day_fungus":${(pday) ? `"${pday}"` : null},
+      "mature": ${(itemp) ? `"${itemp}"` : null},
+      "day_mature": ${(iday) ? `"${iday}"`: null},
+      "manipulation":${(rtemp) ? `"${rtemp}"` : null},
+      "day_m":${(rday) ? `"${rday}"` : null},
+      "prediction":${(prediction) ? `"${prediction}"` : null},
+      "month_eggs": ${(emonth.length) ? `"${emonth}"` : "[]"},
+      "month_larva": ${(lmonth.length) ? `"${lmonth}"` : "[]"},
+      "month_fungus":${(pmonth.length) ? `"${pmonth}"` : "[]"},
+      "month_mature": ${(imonth.length) ? `"${imonth}"` : "[]"},
+      "month_m": ${(rmonth.length) ? `"${rmonth}"` : "[]"}
+  },
+  "all_protect": {
+      "agro_protect":${(agro) ? `"${agro}" `: null},
+      "bio_protect":${(bio) ? `"${bio}"` : null},
+      "chemistry_protect":${(chemic) ? `"${chemic}"` : null}
+  },
+  "all_photo": {
+      "photo_status": ${imageFilesStatus}
+  },
+  "all_note": {
+      "name": ${null},
+      "note_status": ${noteFilesStatus},
+      "notes": ${null}
+  },
+  "all_experiment": {   
+      "name": ${null},
+      "experiment_status": ${exprimentFilesStatus}
+   }
+
+  }`
+
+   console.log("Umumiy Json: ", allNewJsonForm)
+
+
+  //  const blob = new Blob([allNewJsonForm], {
+  //   type: 'application/json'
+  // });
+  
+  allInformationJsonFile.append("document", allNewJsonForm);
+  
+   requestWithFile.post('/alldata/', allInformationJsonFile )
+
+
   };
 
   return (
     <Row>
+      <ToastContainer
+      position="top-center"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      />
       <Col md="6" xs="12" className="m-auto">
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} encType="multipart/form-data">
           <Form.Group>
             <Form.Label className="text-center d-block">Зарарли организм</Form.Label>
             <Form.Label>Карантин ёки нокарантин</Form.Label>
@@ -436,6 +652,7 @@ const InstitutionForm = () => {
               value={spreadCountry}
               onChange={e => {
                 setSpreadCountry(e);
+
               }}
             />
           </Form.Group>
@@ -750,6 +967,7 @@ const InstitutionForm = () => {
                         <input {...getInputProps()} />
                         <p>Файл танланг</p>
                         {images.length > 0 ? <p>Файллар юкланди</p> : null}
+                       
                       </div>
                       {/* <aside>
                     <h4>Images</h4>
@@ -768,6 +986,7 @@ const InstitutionForm = () => {
                         <input {...getInputProps()} />
                         <p>Файл танланг</p>
                         {notes.length > 0 ? <p>Файллар юкланди</p> : null}
+                        
                       </div>
                     </section>
                   )}
@@ -783,6 +1002,7 @@ const InstitutionForm = () => {
                         <input {...getInputProps()} />
                         <p>Файл танланг</p>
                         {experiments.length > 0 ? <p>Файллар юкланди</p> : null}
+                       
                       </div>
                     </section>
                   )}
@@ -802,4 +1022,4 @@ const InstitutionForm = () => {
   );
 };
 
-export default InstitutionForm;
+export default NewInstitutionFormTeleg;

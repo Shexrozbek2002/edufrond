@@ -37,11 +37,12 @@ const ChangePassword = props => {
   const [formValues, setFormValues] = useState(initialValues);
 
   const changePassRequest = async () => {
+    
     fetchRequest
-      .post('user/', {
+      .post('https://edu.uzagrolab.uz/api/user/change/password', {
         old_password: formValues.old_password,
         new_password: formValues.new_password,
-      })
+      },)
       .then(res => {
         // console.log(res);
         if (res.data.username) {

@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './registerServiceWorker';
 import App from './App';
 import { AuthContextProvider } from './store/auth-context';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 ReactDOM.render(
   <AuthContextProvider>
-    <BrowserRouter>
+    <HashRouter>
       <App />
-    </BrowserRouter>
+    </HashRouter>
   </AuthContextProvider>,
   document.getElementById('app')
 );

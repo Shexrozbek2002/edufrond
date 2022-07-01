@@ -1,0 +1,14 @@
+.changePasswordStyle{
+    margin-right: 20px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid #E74C4b;
+    text-decoration: none;
+    color: #fff;
+    background-color: #E74C4b;
+}
+.changePasswordStyle:hover{
+  text-decoration: none;
+  color: #fff;
+  background-color: #d41010;
+}

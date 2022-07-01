@@ -10,6 +10,7 @@ const AuthContext = React.createContext({
   countries: [],
   months: [],
   productTypes: [],
+  seedTypes: [],
   login: token => {},
   logout: () => {},
   getRole: role => {},
@@ -18,7 +19,8 @@ const AuthContext = React.createContext({
   fetchCrop: crops => {},
   getCountries: countries => {},
   getMonths: months => {},
-  getProductTypes: productTypes => {}
+  getProductTypes: productTypes => {},
+  getSeedTypes: seedTypes => {}
 });
 
 export const AuthContextProvider = props => {
@@ -33,6 +35,7 @@ export const AuthContextProvider = props => {
   const [countries, setCountries] = useState([]);
   const [months, setMonths] = useState([]);
   const [productTypes, setProductTypes] = useState([]);
+  const [seedTypes, setSeedTypes] = useState([]);
 
   //   let userIsLoggedIn = false;
   //   if (token) {
@@ -81,6 +84,10 @@ export const AuthContextProvider = props => {
     setProductTypes(productTypes);
   }
 
+  const getSeedTypesHandler = seedTypes => {
+    setSeedTypes(seedTypes);
+  }
+
   const contextValue = {
     token: token,
     isLoggedIn: userIsLoggedIn,
@@ -91,6 +98,7 @@ export const AuthContextProvider = props => {
     countries: countries,
     months: months,
     productTypes: productTypes,
+    seedTypes: seedTypes,
     login: loginHandler,
     logout: logoutHandler,
     fetchRegion: fetchRegionHandler,
@@ -100,6 +108,7 @@ export const AuthContextProvider = props => {
     getCountries: getCountriesHandler,
     getMonths: getMonthsHandler,
     getProductTypes: getProductTypesHandler,
+    getSeedTypes: getSeedTypesHandler,
   };
 
   return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;

@@ -1,5 +1,5 @@
 import React, { Component, useContext } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, NavLink } from 'react-router-dom';
 import { Button, NavItem, UncontrolledDropdown } from 'reactstrap';
 import { Header, SidebarNav, Footer, PageContent, PageAlert, Page } from '../vibe';
 import Logo from '../assets/images/logo-ephyto.png';
@@ -9,7 +9,7 @@ import routes from '../views';
 import ContextProviders from '../vibe/components/utilities/ContextProviders';
 import handleKeyAccessibility, { handleClickAccessibility } from '../vibe/helpers/handleTabAccessibility';
 import AuthContext from '../store/auth-context';
-
+import './DashboardStyle.css'
 const MOBILE_SIZE = 992;
 
 export default class DashboardLayout extends Component {
@@ -123,7 +123,7 @@ function HeaderNav(props) {
 
   const logoutHandle = () => {
     authCtx.logout();
-    console.log(authCtx.token);
+
     // props.history.replace('/login');
   };
   return (
@@ -159,6 +159,7 @@ function HeaderNav(props) {
           <DropdownItem divider />
           <DropdownItem>Reset</DropdownItem>
         </DropdownMenu> */}
+        <NavLink to="/changepassword" className="changePasswordStyle">Parolni o`zgartirish</NavLink>
         <Button color="danger" onClick={logoutHandle}>
           {' '}
           <i className="fa fa-sign-out"></i>

@@ -3,3 +3,88 @@
   height: 18px;
   margin-left: -1.5rem !important;
 }
+.errorName{
+  color: red;
+  padding-left: 10px;
+}
+
+.institutFormStyle{
+  border: 1px solid black;
+}
+
+.productRow{
+  display: flex;
+  align-items: center;
+}
+
+.productRowIcon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 16px;
+}
+
+.PlusIconStyle {
+  font-size: 38px;
+  color: rgb(0, 119, 255);
+  cursor: pointer;
+  transition: all 0.3s ease !important;
+}
+ 
+.productRowIcon .PlusIconStyle:hover{
+  color: rgb(10, 113, 231);
+}
+
+.CloseIconStyle{
+  color: red;
+  font-size: 30px;
+}
+
+.CloseIconStyle:hover{
+  color: rgb(172, 10, 10);
+}
+
+.closeIconStyle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.AddInputValue{
+  display: flex;
+  align-items: center;
+  padding: 10px 0px;
+  border-bottom: 1px solid rgb(35, 182, 6);
+}
+
+p{
+  margin: 0 !important;
+}
+
+.arrayProductForm{
+  padding-top: 10px;
+  overflow: hidden;
+}
+
+.fightStyle{
+  padding-top: 10px;
+}
+
+.firstFightCol{
+  position: relative;
+  bottom: 8px;
+  
+}
+
+.EnterVideoStyle{
+  border: 1px solid rgb(35, 182, 6);
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.videoUploadStyle{
+  font-size: 25px;
+  color: rgb(35, 182, 6);
+  cursor: pointer;
+}

@@ -1,0 +1,28 @@
+.pagination {
+    justify-content: flex-start;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul.pagination li a {
+    text-decoration: none;
+    color: #337ab7;
+    font-size: 20px;
+    width: 30px;
+    border: 1px solid #e2e2e2;
+    padding: 5px 15px;
+  }
+  ul.pagination li.active a {
+    color: red;
+  }
+  ul.pagination li a:hover,
+  ul.pagination li a.active {
+    color: blue;
+  }
+
+  .pest-head .row{
+    display: flex;
+    align-items: flex-start;
+    padding-bottom: 15px;
+  }

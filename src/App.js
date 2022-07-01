@@ -5,6 +5,7 @@ import './vibe/scss/styles.scss';
 import createRequest, { fetchRequest, request } from './helpers/createRequest';
 import AuthContext from './store/auth-context';
 import Login from './views/pages/Login/Login';
+import ChangePassword from './views/pages/account/ChangePassword';
 // import Limit from './views/pages/Limit/Limit';
 // import InstitutionForm from './views/pages/InstitutionForm/InstitutionForm';
 
@@ -29,19 +30,25 @@ import Login from './views/pages/Login/Login';
 // };
 
 const getCountries = async () => {
-  const countries = await request.get('country/').then(res => res.data);
-  return countries;
+  const countries = await request.get('country')
+  .then(res => res.data)   
+   return countries;
 }
 
 const getMonths = async () => {
-  const months = await request.get('months/').then(res => res.data);
+  const months = await request.get('months').then(res => res.data);
   return months
 }
 
 const getProductTypes = async () => {
-  const productTypes = await request.get('productypes/').then(res => res.data);
+  const productTypes = await request.get('product/type').then(res => res.data);
   return productTypes
 }
+
+// const getSeedTypes = async () => {
+//  const seedTypes = await request.get('plants').then(res => res.data);
+//   return seedTypes
+// }
 
 export default function App() {
   const authCtx = useContext(AuthContext);
@@ -60,6 +67,10 @@ export default function App() {
         const loadedTypes = await getProductTypes();
         authCtx.getProductTypes(loadedTypes);
       }
+      // if(authCtx.seedTypes.length === 0) {
+      //   const loadedTypes = await getSeedTypes();
+      //   authCtx.getSeedTypes(loadedTypes);
+      // }
     }
   }, [])
 
@@ -70,8 +81,9 @@ export default function App() {
           <Login />
         </Route>
       )}
-      
+      <Route path="/changepassword" component={ChangePassword}/>
       {authCtx.isLoggedIn && <Route component={DashboardLayout} />}
+      
       {/* <Route path="/center">
         <InstitutionForm />
       </Route> */}

@@ -1,0 +1,102 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
+.editImgStyle{
+    width: 600px;
+    height:600px;
+    object-fit: cover;
+    margin-top: 15px;
+}
+
+.VideoStyle{
+    width: 400px;
+    height: 400px;
+    /* margin: 20px; */
+    margin-bottom: 20px;
+}
+
+.Video-box{
+    display: flex;
+    flex-direction: column;
+}
+
+.sectionText{
+    color: darkblue;
+    font-size: 30px;
+    border: 1px solid darkblue;
+    padding: 5px 0px;
+}
+
+.div_block{
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+strong{
+    font-size: 20px;
+    /* color: rgb(6, 6, 16); */
+    color: rgb(37, 21, 189);
+}
+
+ol{
+    border: 1px solid #ccc;
+    padding-left: 30px;
+}
+
+ol li p{
+    font-size: 20px;
+    color: black;
+    font-weight: 600;
+}
+
+.AllStyle{
+    text-align: center;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center; */
+    /* border: 1px solid black; */
+    background-color: #fff;
+}
+
+.AllStyle ol{
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+ol li{
+    padding: 5px 0px;
+}
+
+.fileName{
+    display: flex;
+    align-items: center;
+}
+
+.fileIcon{
+    font-size: 32px;
+    color: rgb(84, 84, 239);
+    margin-right: 10px;
+}
+
+.fileA{
+    font-size: 20px;
+}
+
+.nameOl{
+    border: none;
+}
+
+.btn-box{
+    width: 100%;
+    padding: 20px 0px;
+}
+
+.btn-box button{
+  margin-right: 20px;
+}
